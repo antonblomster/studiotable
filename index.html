@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Studio table</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#FAF6EC" id="theme-color" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="description" content="Studio table — curious objects for considered homes. Hantverkargatan 37, Stockholm." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet" />
+<!--
+  Studio table — store website.
+  Implemented from the Claude Design handoff. The prototype's live "Tweaks"
+  panel was a design-time exploration harness; the values the brand landed on
+  are baked in here as the shipped defaults:
+    background Beige · wordmark Painted · liveliness 1.25 · hand-drawn wobble 0.75
+  The hand-wobble (0.75) is folded into every feDisplacementMap "scale".
+-->
+<style>
+  :root{
+    --blue:#1A16E8; --blue-deep:#100C9E;
+    --paper:#FAF6EC; --beige:#F4EFE3; --beige-2:#F2ECDC; --sand:#E7DEC9;
+    --serif:'Crimson Pro', Georgia, serif;
+    /* live ink colour + surface */
+    --ink:var(--blue);
+    --surface:var(--paper);
+    /* motion knobs — baked at liveliness 1.25 */
+    --energy:1.25; --sway-amp:3.25deg; --bob-amp:3.75px; --poke-h:20px;
+  }
+  *,*::before,*::after{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;background:var(--surface);color:var(--ink);
+    font-family:var(--serif);font-weight:400;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+    overflow:hidden;transition:background .5s ease,color .5s ease;
+  }
+  body[data-bg="blue"]{ --surface:#1A16E8; --ink:#F4EFE3; background:#1A16E8; color:#F4EFE3; }
+  body[data-bg="blue"] .page{ background:#1A16E8; }
+  ::selection{background:var(--ink);color:var(--surface);}
+
+  .painted{filter:url(#txtbrush);}
+
+  /* ---------- full-height page shell ---------- */
+  .page{
+    height:100vh;height:100dvh;
+    display:flex;flex-direction:column;
+    padding:clamp(20px,3.4vh,40px) clamp(22px,4vw,56px);
+    background:var(--surface);transition:background .5s ease;
+  }
+  .stage-area{flex:1 1 auto;display:flex;align-items:center;justify-content:center;min-height:0;
+    padding-bottom:clamp(24px,11vh,128px);}
+  .lockup{
+    width:min(940px,94vw);
+    display:flex;flex-direction:column;align-items:center;
+    gap:clamp(22px,4vh,52px);
+  }
+  .lockup .ml-stage{
+    width:100%;
+    height:clamp(248px,40vh,440px);
+  }
+  .wordmark{
+    font-size:clamp(46px,11.2vw,116px);
+    font-weight:500;font-style:italic;line-height:.9;letter-spacing:-0.02em;white-space:nowrap;
+    color:var(--ink);
+  }
+  .tagline{
+    font-size:clamp(15px,5.2vw,27px);
+    font-style:italic;font-weight:400;letter-spacing:.005em;
+    color:color-mix(in srgb,var(--ink) 78%, var(--surface));
+    text-align:center;white-space:nowrap;
+  }
+
+  footer{
+    flex:0 0 auto;
+    display:flex;justify-content:space-between;align-items:flex-end;gap:16px;
+    font-size:clamp(13px,1.5vw,16px);font-weight:500;letter-spacing:.02em;
+    color:color-mix(in srgb,var(--ink) 72%, var(--surface));
+  }
+  footer .left,footer .right{white-space:nowrap;}
+  footer .right{text-align:right;}
+
+  /* ============ MOTION LAB primitives ============ */
+  .ml-stage{position:relative;overflow:visible;}
+  .ml-table{position:absolute;inset:0;filter:url(#ml-wobble);pointer-events:none;}
+  .ml-top,.ml-leg{position:absolute;background:var(--ink);border-radius:2px;transition:background .5s ease;}
+  /* the table is one piece — bar + legs reposition together on resize, no lag */
+
+  .ml-ware{position:absolute;will-change:transform,left;pointer-events:none;}
+  .ml-ware .ml-svg{width:100%;height:100%;display:block;overflow:visible;transform-origin:50% 87.5%;}
+  .ml-hit{position:absolute;inset:0;}
+  .ml-hit svg{width:100%;height:100%;display:block;overflow:visible;pointer-events:none;}
+  .ml-hit svg *{stroke:transparent !important;fill:transparent !important;stroke-width:16px !important;pointer-events:all;}
+  .ml-pull{pointer-events:auto;}
+  .ml-shadow{position:absolute;left:14%;width:72%;height:9px;border-radius:50%;z-index:-1;
+    background:radial-gradient(closest-side, color-mix(in srgb,var(--ink) 26%, transparent), transparent);
+    transition:transform .3s ease,opacity .3s ease;}
+  .ml-grab{cursor:grab;}
+
+  @keyframes ml-sway{from{transform:rotate(calc(-1*var(--sway-amp,2.6deg)))}to{transform:rotate(var(--sway-amp,2.6deg))}}
+  .idle-sway .ml-svg{animation:ml-sway calc(var(--dur,4s)/var(--energy,1)) ease-in-out var(--d,0s) infinite alternate;}
+  @keyframes ml-bob{from{transform:translateY(0)}to{transform:translateY(calc(-1*var(--bob-amp,3px)))}}
+  .idle-bob .ml-svg{animation:ml-bob calc(var(--dur,4s)/var(--energy,1)) ease-in-out var(--d,0s) infinite alternate;}
+  @keyframes ml-jitter{0%,90%,100%{transform:translate(0,0)}93%{transform:translate(1px,-1px) rotate(1deg)}96%{transform:translate(-1px,1px) rotate(-1deg)}}
+  .idle-jitter .ml-svg{animation:ml-jitter calc(5s/var(--energy,1)) ease-in-out var(--d,0s) infinite;}
+
+  @keyframes ml-poke{0%{transform:translateY(0)}28%{transform:translateY(calc(-1*var(--poke-h,18px))) scaleY(1.05)}58%{transform:translateY(0) scaleY(.95)}80%{transform:translateY(-5px)}100%{transform:translateY(0)}}
+  .ml-poke{animation:ml-poke .6s cubic-bezier(.3,1.4,.5,1);}
+
+  .ml-lift{transform:translateY(-18px) scale(1.06);transition:transform .16s ease;z-index:30;}
+  .ml-lift .ml-shadow{transform:scale(1.3);opacity:.45;}
+  @keyframes ml-drop{0%{transform:translateY(-18px) scale(1.06)}55%{transform:translateY(0) scale(1)}74%{transform:translateY(-6px) scale(1.01)}100%{transform:translateY(0) scale(1)}}
+  .ml-drop{animation:ml-drop .36s cubic-bezier(.3,1.3,.5,1);}
+
+  /* lamp — ink rays + pull string */
+  .ml-rays{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;}
+  .ml-rays line{stroke:var(--ink);stroke-width:3.4;stroke-linecap:round;}
+  .ml-rays-g{opacity:0;transition:opacity .45s ease;}
+  .lamp-on .ml-rays-g{opacity:1;}
+  @keyframes ml-rayflick{0%,100%{opacity:.7}50%{opacity:.92}}
+  .ml-pull{position:absolute;border:none;background:transparent;cursor:pointer;z-index:20;
+    padding:0 9px;line-height:0;display:block;}
+  .ml-pull-svg{width:15px;height:42px;overflow:visible;display:block;}
+  .ml-pull-line{fill:none;stroke:var(--ink);stroke-width:1.7;stroke-linecap:round;}
+  .ml-pull-knob{fill:var(--ink);}
+  @keyframes ml-tug{0%{transform:translateY(0)}42%{transform:translateY(4px)}100%{transform:translateY(0)}}
+  .ml-pull-tug{animation:ml-tug .42s ease;}
+
+  /* candle — spark ticks (only if candle ever added) */
+  .ml-sparks{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;}
+  .ml-sparks line{stroke:var(--ink);stroke-width:2;stroke-linecap:round;}
+  .ml-sparks-g{transform-box:fill-box;transform-origin:center bottom;transform:scale(0);opacity:0;
+    transition:transform .4s cubic-bezier(.3,1.4,.5,1),opacity .3s ease;}
+  .candle-lit .ml-sparks-g{transform:scale(1);opacity:.9;animation:ml-rayflick 2.4s ease-in-out infinite;}
+
+  @keyframes ml-tablein{0%{opacity:0;transform:translateY(16px)}100%{opacity:1;transform:translateY(0)}}
+  .intro-on .ml-table{animation:ml-tablein .8s cubic-bezier(.22,1,.36,1) both;}
+  @keyframes ml-warein{0%{transform:translateY(-66px) rotate(-7deg);opacity:0}55%{opacity:1}80%{transform:translateY(0) rotate(0)}90%{transform:translateY(-6px)}100%{transform:translateY(0)}}
+  .intro-on .ml-ware{animation:ml-warein .85s cubic-bezier(.3,1.2,.5,1) var(--in-d,0s) both;}
+
+  @media(prefers-reduced-motion:reduce){
+    .idle-sway .ml-svg,.idle-bob .ml-svg,.idle-jitter .ml-svg,
+    .lamp-on .ml-rays-g,.candle-lit .ml-sparks-g{animation:none;}
+    .intro-on .ml-table,.intro-on .ml-ware{animation:none;}
+  }
+
+  /* short landscape (phones held sideways): compress the vertical rhythm so the
+     whole lockup — shelf, wordmark, tagline, footer — fits without clipping */
+  @media (orientation:landscape) and (max-height:560px){
+    .page{padding:clamp(10px,3vh,20px) clamp(18px,4vw,44px);}
+    .stage-area{padding-bottom:clamp(6px,2.5vh,18px);}
+    .lockup{width:min(760px,92vw);gap:clamp(2px,1vh,10px);}
+    .lockup .ml-stage{height:clamp(128px,46vh,260px);}
+    .wordmark{font-size:clamp(32px,6.6vw,68px);}
+    .tagline{font-size:clamp(13px,2.6vw,20px);}
+  }
+  /* very short landscape — trim further */
+  @media (orientation:landscape) and (max-height:420px){
+    .lockup .ml-stage{height:clamp(104px,42vh,180px);}
+    .wordmark{font-size:clamp(28px,5.6vw,52px);}
+    .tagline{font-size:clamp(12px,2.3vw,17px);}
+    footer{font-size:clamp(11px,1.4vw,14px);}
+  }
+</style>
+</head>
+<body>
+
+<!-- painted + table-wobble filters (displacement scale baked at hand 0.75) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <filter id="txtbrush" x="-4%" y="-12%" width="108%" height="124%">
+    <feTurbulence type="turbulence" baseFrequency="0.011" numOctaves="3" seed="8" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="4.5" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+  <filter id="ml-wobble" x="-6%" y="-6%" width="112%" height="112%">
+    <feTurbulence type="turbulence" baseFrequency="0.013" numOctaves="2" seed="9" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+  <filter id="ml-sketch" x="-40%" y="-40%" width="180%" height="180%">
+    <feTurbulence type="turbulence" baseFrequency="0.05" numOctaves="2" seed="13" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="2.7" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</defs></svg>
+
+<div class="page">
+  <main class="stage-area">
+    <div class="lockup">
+      <div class="ml-stage" id="stage"></div>
+      <div class="wordmark painted" id="wordmark" style="font-family: Times">STUDIO TABLE</div>
+      <div class="tagline" id="tagline">Curious objects for considered homes.</div>
+    </div>
+  </main>
+  <footer>
+    <span class="left" style="font-size: 20px">Hantverkargatan 37</span>
+    <span class="right" style="font-size: 20px">Stockholm</span>
+  </footer>
+</div>
+
+<script src="objects.js"></script>
+<script src="motion-lab.js"></script>
+<script>
+(function(){
+  const ML = window.MotionLab;
+  const stageEl = document.getElementById("stage");
+
+  // canonical L→R order; the first few survive on narrow screens (named stars first)
+  const ORDER = ["vaseFlowers","lamp","clock","books","bowl","teapot"];
+  const inkOf = ()=> document.body.dataset.bg === "blue" ? ML.BEIGE : ML.BLUE;
+  const surfaceOf = ()=> document.body.dataset.bg === "blue" ? "#1A16E8" : "#FAF6EC";
+
+  // Brand rule: "the table is constant." The wares are a fixed size, so the table keeps ONE
+  // fixed weight (bar + legs identical) at every viewport — it never scales or varies.
+  const TABLE_THICK = 18;
+  const stage = ML.createStage(stageEl, { surfaceFrac:0.66, floorFrac:0.96, padFrac:0.075, wareW:96, barH:TABLE_THICK, legW:TABLE_THICK });
+
+  // slightly more hand-drawn than the table — gives the wares their own wobble.
+  // scale baked at hand 0.75 (source 4.2 → 3.15).
+  const WARE_ROUGH = { scale:3.15, bf:0.014, oct:2 };
+
+  function bucketCount(){
+    const w = stageEl.clientWidth || window.innerWidth;
+    if(w < 430) return 3;
+    if(w < 680) return 4;
+    return 6;
+  }
+
+  let lastSig = "";
+  function placeWares(){
+    const list = ORDER.slice(0, bucketCount());
+    const ink = inkOf();
+    const surf = surfaceOf();
+    const sig = list.join(",")+"|"+ink;
+    if(sig === lastSig) return;          // nothing structural changed
+    lastSig = sig;
+
+    stage.wares.slice().forEach(w=>w.remove());
+    stage.wares = [];
+    const xfs = ML.spread(list.length);
+    list.forEach((n,i)=>{
+      const w = ML.addWare(stage, n, xfs[i], { color:ink, bg:surf, seed:7+i*3, rough:WARE_ROUGH });
+      ML.draggable(stage, w);            // every object is draggable (interior too)
+    });
+  }
+  placeWares();
+
+  // table + objects animate in together on first load
+  (function runIntro(){
+    if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    stageEl.classList.add("intro-on");
+    stage.wares.forEach((w,i)=> w.style.setProperty("--in-d", (0.04 + i*0.075).toFixed(3)+"s"));
+    const total = 0.04 + (stage.wares.length-1)*0.075 + 0.85 + 0.25;
+    setTimeout(()=> stageEl.classList.remove("intro-on"), total*1000);
+  })();
+
+  // re-evaluate ware count on resize (motion-lab re-lays-out positions itself; thickness is fixed)
+  let rt;
+  window.addEventListener("resize", ()=>{ clearTimeout(rt); rt = setTimeout(()=>{ placeWares(); }, 160); });
+})();
+</script>
+</body>
+</html>
