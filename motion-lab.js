@@ -121,11 +121,13 @@
     el.classList.add("lamp-off");
     const toggle = (e) => {
       e.stopPropagation();
-      el.classList.toggle("lamp-on");
+      const on = el.classList.toggle("lamp-on");
       el.classList.toggle("lamp-off");
       string.classList.remove("ml-pull-tug");
       void string.offsetWidth;
       string.classList.add("ml-pull-tug");
+      // let the host react to the flick (e.g. recolour the whole scene)
+      el.dispatchEvent(new CustomEvent("ml:lampflip", { bubbles: true, detail: { on } }));
     };
     string.addEventListener("click", toggle);
   }
