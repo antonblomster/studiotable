@@ -276,13 +276,19 @@
   function draggable(st, ware) {
     ware.classList.add("ml-grab");
     const t = ware._hit || ware;
-    let active = false, pid = null;
+    let active = false, pid = null, grabDX = 0;
     const down = (e) => {
       if (e.target.closest(".ml-pull")) return;  // let the lamp string work
       active = true; pid = e.pointerId;
       ware.dataset.dragging = "1";
+      // remember where on the ware the user grabbed, so it doesn't snap its
+      // centre to the pointer — the grab point stays put under the finger
+      const rect = st.host.getBoundingClientRect();
+      const w = parseFloat(ware.style.width);
+      const curLeft = parseFloat(ware.style.left) || 0;
+      grabDX = (e.clientX - rect.left) - (curLeft + w / 2);
       ware.classList.add("ml-lift");
-      ware.classList.remove("idle-sway", "idle-bob", "idle-tick", "idle-jitter");
+      ware.classList.remove("idle-sway", "idle-bob", "idle-tick", "idle-jitter", "idle-tilt");
       try { t.setPointerCapture(pid); } catch (e) {}
       // bring to front
       st.wares.forEach((w) => (w.style.zIndex = w === ware ? 30 : ""));
@@ -292,7 +298,7 @@
       if (!active) return;
       const g = geom(st);
       const rect = st.host.getBoundingClientRect();
-      let cx = e.clientX - rect.left;
+      let cx = (e.clientX - rect.left) - grabDX;  // honour the original grab offset
       cx = Math.max(g.usableL, Math.min(g.usableR, cx));
       const xf = (cx - g.usableL) / (g.usableR - g.usableL);
       const w = parseFloat(ware.style.width);
@@ -316,7 +322,7 @@
   // knock a ware off the edge — it tips and falls past the floor
   function knockOff(st, ware, dir) {
     const g = geom(st);
-    ware.classList.remove("idle-sway", "idle-bob", "idle-tick", "idle-jitter");
+    ware.classList.remove("idle-sway", "idle-bob", "idle-tick", "idle-jitter", "idle-tilt");
     ware.classList.add("ml-fall");
     ware.style.setProperty("--fall-x", (dir > 0 ? 1 : -1) * (g.W * 0.18) + "px");
     ware.style.setProperty("--fall-y", (g.H * 0.7) + "px");
