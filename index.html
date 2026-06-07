@@ -53,7 +53,9 @@
   .stage-area{flex:1 1 auto;display:flex;align-items:center;justify-content:center;min-height:0;
     padding-bottom:clamp(24px,11vh,128px);}
   .lockup{
-    width:min(940px,94vw);
+    /* width tracks the viewport with no upper cap, so the table keeps
+       growing on wide desktop screens (typography stays centered + nowrap) */
+    width:94vw;
     display:flex;flex-direction:column;align-items:center;
     gap:clamp(22px,4vh,52px);
   }
@@ -167,6 +169,10 @@
     .wordmark{font-size:clamp(28px,5.6vw,52px);}
     .tagline{font-size:clamp(12px,2.3vw,17px);}
     footer{font-size:clamp(11px,1.4vw,14px);}
+  }
+  /* phones (portrait): pull the tagline a touch closer to the wordmark */
+  @media (max-width:600px){
+    .title-group{gap:clamp(5px,1.1vh,12px);}
   }
 </style>
 </head>
