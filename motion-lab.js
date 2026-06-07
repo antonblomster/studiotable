@@ -148,7 +148,7 @@
   // idle character per ware type
   const IDLE = {
     vaseFlowers: "sway", plant: "sway", candle: "bob", lamp: "",
-    clock: "", bowl: "bob", books: "", cup: "bob", teapot: "bob",
+    clock: "", bowl: "tilt", books: "", cup: "bob", teapot: "",
     pitcher: "bob", trinkets: "jitter", frame: "", cup2: "",
   };
   function applyIdle(el) {
