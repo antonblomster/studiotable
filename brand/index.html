@@ -1,0 +1,700 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Studio table — Brand Guidelines</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --blue:#1A16E8;
+    --blue-deep:#100C9E;
+    --paper:#FCFAF4;
+    --ecru:#FAF6EC;
+    --beige:#F4EFE3;
+    --beige-2:#F2ECDC;
+    --sand:#E7DEC9;
+    --maxw:1180px;
+    --serif:'Crimson Pro', Georgia, serif;
+  }
+  *,*::before,*::after{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;background:var(--paper);color:var(--blue);
+    font-family:var(--serif);font-weight:400;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:var(--blue);color:var(--beige);}
+
+  /* ---- type ---- */
+  .eyebrow{font-size:13px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;}
+  h1,h2,h3,h4{font-weight:600;margin:0;line-height:1;letter-spacing:-0.01em;}
+  .lead{font-size:23px;line-height:1.5;font-weight:400;max-width:40ch;}
+  p{font-size:18px;line-height:1.6;font-weight:400;margin:0 0 1em;}
+  p:last-child{margin-bottom:0;}
+  .muted{color:color-mix(in srgb,var(--blue) 62%, var(--beige));}
+  a{color:var(--blue);}
+
+  /* ---- shell ---- */
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 40px;}
+  section{padding:104px 0;border-top:1px solid color-mix(in srgb,var(--blue) 22%, transparent);}
+  .sec-head{margin-bottom:64px;max-width:920px;}
+  .sec-title{font-size:clamp(40px,6vw,72px);}
+  .sec-sub{font-size:20px;line-height:1.5;font-weight:400;max-width:56ch;margin-top:18px;color:color-mix(in srgb,var(--blue) 70%, var(--beige));}
+
+  .painted{filter:url(#txtbrush);}
+  .painted-soft{filter:url(#txtsoft);}
+
+  /* ---- cover ---- */
+  .cover{padding:40px 0 52px;border-top:none;}
+  .cover-top{display:flex;justify-content:space-between;align-items:flex-start;}
+  .cover-mid{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:48px;text-align:center;padding:8vh 0 7vh;}
+  .cover-lockup{container-type:inline-size;width:min(600px,86vw);display:flex;flex-direction:column;align-items:center;gap:20px;}
+  .cover-lockup [data-logo]{display:flex;justify-content:center;}
+  .cover-lockup .cover-word{font-size:14cqw;line-height:.9;white-space:nowrap;}
+  .cover-word{font-size:clamp(52px,12vw,140px);font-weight:600;line-height:.88;letter-spacing:-0.02em;}
+  .cover-foot{display:flex;justify-content:space-between;align-items:flex-end;font-size:14px;font-weight:500;letter-spacing:.04em;}
+
+  /* ---- panels / cards ---- */
+  .panel{background:var(--beige-2);border:1px solid color-mix(in srgb,var(--blue) 18%, transparent);}
+  .panel.blue{background:var(--blue);color:var(--beige);border:none;}
+  .panel.blue ::selection{background:var(--beige);color:var(--blue);}
+  .panel-pad{padding:48px;}
+  .center{display:flex;align-items:center;justify-content:center;}
+  .col{display:flex;flex-direction:column;}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:32px;}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;}
+  .grid6{display:grid;grid-template-columns:repeat(6,1fr);gap:20px;}
+
+  .cap{font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;margin-top:18px;
+    color:color-mix(in srgb,var(--blue) 64%, var(--beige));}
+  .cap span{display:block;font-weight:400;letter-spacing:0;text-transform:none;font-size:14px;margin-top:5px;
+    color:color-mix(in srgb,var(--blue) 52%, var(--beige));}
+
+  /* ---- swatches ---- */
+  .sw{display:flex;flex-direction:column;gap:0;border:1px solid color-mix(in srgb,var(--blue) 18%, transparent);}
+  .sw-chip{height:180px;}
+  .sw-meta{padding:18px 20px;background:var(--beige-2);display:flex;flex-direction:column;gap:4px;}
+  .sw-name{font-size:20px;font-weight:600;}
+  .sw-hex{font-size:14px;letter-spacing:.04em;font-variant-numeric:tabular-nums;color:color-mix(in srgb,var(--blue) 60%, var(--beige));}
+  .sw-use{font-size:14px;line-height:1.45;color:color-mix(in srgb,var(--blue) 70%, var(--beige));margin-top:4px;}
+
+  /* ---- type specimen ---- */
+  .specimen{display:grid;grid-template-columns:200px 1fr;gap:40px;padding:26px 0;
+    border-top:1px solid color-mix(in srgb,var(--blue) 16%, transparent);align-items:baseline;}
+  .specimen:first-of-type{border-top:none;}
+  .specimen .meta{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+    color:color-mix(in srgb,var(--blue) 60%, var(--beige));}
+  .specimen .meta span{display:block;text-transform:none;letter-spacing:0;font-weight:400;font-size:14px;margin-top:6px;
+    color:color-mix(in srgb,var(--blue) 48%, var(--beige));}
+  .glyphset{font-size:30px;font-weight:400;line-height:1.5;letter-spacing:.02em;word-spacing:.1em;}
+
+  /* ---- wares ---- */
+  .ware{aspect-ratio:1;background:var(--beige-2);border:1px solid color-mix(in srgb,var(--blue) 16%, transparent);
+    display:flex;align-items:center;justify-content:center;position:relative;}
+  .ware .lab{position:absolute;left:14px;bottom:12px;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+    color:color-mix(in srgb,var(--blue) 55%, var(--beige));}
+
+  /* ---- misuse ---- */
+  .dont{position:relative;}
+  .dont::after{content:"";position:absolute;top:13px;right:14px;width:24px;height:24px;border:2px solid var(--blue);border-radius:50%;}
+  .dont::before{content:"";position:absolute;top:23px;right:14px;width:24px;height:2px;background:var(--blue);transform:rotate(-45deg);transform-origin:center;}
+  .badge{display:inline-block;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+    padding:5px 11px;border:1px solid currentColor;margin-top:16px;}
+
+  /* ---- clearspace ---- */
+  .clearbox{position:relative;background:var(--beige-2);border:1px solid color-mix(in srgb,var(--blue) 18%, transparent);
+    padding:64px;display:flex;align-items:center;justify-content:center;}
+  .clearbox .guide{position:absolute;inset:32px;border:1px dashed color-mix(in srgb,var(--blue) 45%, transparent);}
+
+  /* ---- applications ---- */
+  .tote{aspect-ratio:1024/1536;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+  .tote img{width:100%;height:100%;object-fit:cover;display:block;}
+  .tag-photo{aspect-ratio:2048/3072;position:relative;overflow:hidden;}
+  .tag-photo img{width:100%;height:100%;object-fit:cover;display:block;}
+  .tag{background:var(--beige-2);border:1px solid color-mix(in srgb,var(--blue) 30%, transparent);position:relative;padding:46px 26px 30px;margin-top:26px;}
+  .tag .hole{width:16px;height:16px;border:3px solid var(--blue);border-radius:50%;position:absolute;top:16px;left:50%;transform:translateX(-50%);background:var(--beige);}
+  .tag .string{position:absolute;top:-22px;left:50%;width:44px;height:34px;transform:translateX(-50%);border:2.5px solid var(--blue);border-bottom:none;border-radius:22px 22px 0 0;}
+  .card-app{background:var(--beige-2);border:1px solid color-mix(in srgb,var(--blue) 18%, transparent);aspect-ratio:1.75/1;padding:30px;display:flex;flex-direction:column;justify-content:space-between;}
+  .sign{background:var(--blue);color:var(--beige);aspect-ratio:2/1;display:flex;align-items:center;justify-content:center;}
+  .avatar{aspect-ratio:1;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;}
+
+  .toc{display:flex;flex-wrap:wrap;gap:8px 28px;font-size:15px;font-weight:500;}
+  .toc a{text-decoration:none;}
+  .toc a:hover{text-decoration:underline;text-underline-offset:4px;}
+
+  .reco{display:grid;grid-template-columns:1fr 1fr;gap:36px 48px;}
+  .reco h4{font-size:24px;margin-bottom:8px;}
+  .reco p{font-size:16px;color:color-mix(in srgb,var(--blue) 72%, var(--beige));}
+  .reco .n{font-size:13px;font-weight:600;letter-spacing:.14em;color:color-mix(in srgb,var(--blue) 50%, var(--beige));margin-bottom:10px;}
+
+  .pattern-strip{height:120px;overflow:hidden;background:var(--beige-2);border:1px solid color-mix(in srgb,var(--blue) 16%, transparent);display:flex;align-items:center;gap:0;}
+
+  @media(max-width:820px){
+    .grid2,.grid3,.grid4{grid-template-columns:1fr 1fr;}
+    .specimen{grid-template-columns:1fr;gap:10px;}
+    .reco{grid-template-columns:1fr;}
+  }
+
+  /* downloadable assets */
+  .dl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;}
+  .dl-card{background:var(--beige-2);border:1px solid color-mix(in srgb,var(--blue) 18%, transparent);display:flex;flex-direction:column;}
+  .dl-prev{flex:1;display:flex;align-items:center;justify-content:center;padding:34px 28px;min-height:190px;}
+  .dl-prev svg{max-width:100%;width:100%;height:auto;max-height:150px;}
+  .dl-bar{display:flex;align-items:stretch;border-top:1px solid color-mix(in srgb,var(--blue) 14%, transparent);}
+  .dl-bar .dl-label{flex:1;display:flex;align-items:center;padding:0 18px;font-size:15px;font-weight:600;}
+  .dl-bar button{appearance:none;border:none;background:transparent;border-left:1px solid color-mix(in srgb,var(--blue) 14%, transparent);
+    padding:15px 18px;font-family:var(--serif);font-size:14px;font-weight:600;letter-spacing:.06em;color:var(--blue);cursor:pointer;transition:background .15s ease;}
+  .dl-bar button:hover{background:color-mix(in srgb,var(--blue) 12%, transparent);}
+</style>
+</head>
+<body>
+
+<!-- painted filters -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <filter id="txtsoft" x="-4%" y="-12%" width="108%" height="124%">
+    <feTurbulence type="turbulence" baseFrequency="0.014" numOctaves="2" seed="14" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="2.8" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+  <filter id="txtbrush" x="-4%" y="-12%" width="108%" height="124%">
+    <feTurbulence type="turbulence" baseFrequency="0.011" numOctaves="3" seed="8" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="6" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</defs></svg>
+
+<div class="wrap">
+
+  <!-- ============ COVER ============ -->
+  <header class="cover">
+    <div class="cover-top">
+      <span class="eyebrow">Brand Guidelines</span>
+      <span class="eyebrow">v1.0 · 2026</span>
+    </div>
+    <div class="cover-mid">
+      <div class="cover-lockup">
+        <div data-logo="cover-mark" style="width:100%"></div>
+        <div class="cover-word painted" data-comment-anchor="17f1737bbe-div" style="font-weight: 500; font-family: Times; font-style: italic">STUDIO TABLE</div>
+      </div>
+      <div class="lead muted" style="margin-top:2px" data-comment-anchor="dfcbbb4d5b-div">Curious objects for considered homes.</div>
+    </div>
+  </header>
+
+  <!-- ============ CONTENTS / ESSENCE ============ -->
+  <section id="essence">
+    <div class="sec-head">
+      
+      <div>
+        <h2 class="sec-title">The idea</h2>
+        <p class="sec-sub" data-comment-anchor="1ef6664d73-p">A table with lovely objects on it. That’s our shop, and that’s our logo.</p>
+      </div>
+    </div>
+    <div class="grid2" style="gap:64px;align-items:start">
+      <div>
+        <p>Studio table is a second-hand shop in Stockholm. 
+Odd, lovely, used and curated. Our shop is filled with epic antiques and kitchenware. Our brand is human like the objects we put in it.</p>
+        <p>Our logo "bord" is the table that holds our lovely things. Hand drawn and imperfect to mirror ourselves and our brand. Like our shop, that changes from day to day,  the logo holds a bunch of trinkets and things. Everything used by someone else, looking to be placed on another table.</p>
+      </div>
+      <div class="col" style="gap:14px">
+        <div class="eyebrow">Contents</div>
+        <nav class="toc">
+          <a href="#logo">Logo</a>
+          <a href="#sizes">Sizes &amp; responsive shelf</a>
+          <a href="#backgrounds">Backgrounds</a>
+          <a href="#misuse">Misuse</a>
+          <a href="#color">Colour</a>
+          <a href="#type">Typography</a>
+          <a href="#wares">The wares</a>
+          <a href="#texture">Hand-drawn system</a>
+          <a href="#apps">Applications</a>
+          <a href="#next">Where next</a>
+        </nav>
+      </div>
+    </div>
+
+    <div style="margin-top:72px" data-comment-anchor="53334fdfdd-div">
+      <div class="eyebrow" style="margin-bottom:24px">Taglines in play</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 56px">
+        <div style="display:flex;align-items:center;gap:14px;border-top:1px solid color-mix(in srgb,var(--blue) 16%, transparent);padding:18px 0"><span class="painted-soft" style="font-size:27px;font-style:italic;font-weight:500">Curious, odd, curated.</span><span class="badge" style="margin-top:0" data-comment-anchor="850b440667-span">Leading</span></div>
+        <div style="display:flex;align-items:center;border-top:1px solid color-mix(in srgb,var(--blue) 16%, transparent);padding:18px 0"><span style="font-size:27px;font-style:italic;font-weight:500">Everything here has a past.</span></div>
+        <div style="display:flex;align-items:center;border-top:1px solid color-mix(in srgb,var(--blue) 16%, transparent);padding:18px 0"><span style="font-size:27px;font-style:italic;font-weight:500">Curious objects, fairly priced.</span></div>
+        <div style="display:flex;align-items:center;border-top:1px solid color-mix(in srgb,var(--blue) 16%, transparent);padding:18px 0"><span style="font-size:27px;font-style:italic;font-weight:500">Come find something to keep.</span></div>
+        <div style="display:flex;align-items:center;border-top:1px solid color-mix(in srgb,var(--blue) 16%, transparent);padding:18px 0"><span style="font-size:27px;font-style:italic;font-weight:500">Found, cleaned, loved again.</span></div>
+        <div style="display:flex;align-items:center;border-top:1px solid color-mix(in srgb,var(--blue) 16%, transparent);padding:18px 0"><span style="font-size:27px;font-style:italic;font-weight:500">A shopful of second chances.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 01 LOGO ============ -->
+  <section id="logo">
+    <div class="sec-head">
+      
+      <div>
+        <h2 class="sec-title">Logo</h2>
+        <p class="sec-sub">Three forms of one idea: the full lockup, the wordmark, and the mark. The table is always drawn at the “soft” hand-drawn level — present, but composed.</p>
+      </div>
+    </div>
+
+    <div class="panel panel-pad center" style="min-height:440px;margin-bottom:24px">
+      <div class="col" style="align-items:center;gap:34px">
+        <div data-logo="primary" style="width:min(640px,80%)"></div>
+        <div class="cover-word painted" style="font-size:clamp(40px,7vw,84px);font-family:Times,'Times New Roman',serif;font-style:italic;font-weight:500">STUDIO TABLE</div>
+      </div>
+    </div>
+    <div class="cap">Primary lockup<span>Loaded shelf above the wordmark. The default whenever space allows.</span></div>
+
+    <div class="grid2" style="margin-top:56px">
+      <div>
+        <div class="panel panel-pad center" style="min-height:240px">
+          <div class="painted" style="font-size:72px;font-family:Times,'Times New Roman',serif;font-style:italic;font-weight:500;color:var(--blue)">STUDIO TABLE</div>
+        </div>
+        <div class="cap">Wordmark<span>Times italic, painted. Uppercase is the brand default.</span></div>
+      </div>
+      <div>
+        <div class="panel panel-pad center" style="min-height:240px">
+          <div data-logo="mark" style="width:230px"></div>
+        </div>
+        <div class="cap">Mark<span>The bare table. Used where the wordmark won’t fit.</span></div>
+      </div>
+    </div>
+
+    <!-- clearspace -->
+    <div style="margin-top:56px">
+      <div class="clearbox" style="min-height:300px">
+        <div class="guide"></div>
+        <div data-logo="clearspace" style="width:240px"></div>
+      </div>
+      <div class="cap">Clear space<span>Keep a margin of one leg-width (×) clear on every side. Never crop into it.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ 02 SIZES ============ -->
+  <section id="sizes">
+    <div class="sec-head">
+      
+      <div>
+        <h2 class="sec-title">The responsive shelf</h2>
+        <p class="sec-sub">The signature move: the table is constant, the wares scale with the space. Strip back to a bare table at favicon size; load the full shelf at hero size.</p>
+      </div>
+    </div>
+    <div class="panel panel-pad">
+      <div class="grid4" style="align-items:end">
+        <div class="center col"><div data-logo="size-icon" style="width:54px"></div><div class="cap" style="text-align:center">Icon · 16–48px<span data-comment-anchor="d305d93fa0-span">Bare table</span></div></div>
+        <div class="center col"><div data-logo="size-sm" style="width:120px"></div><div class="cap" style="text-align:center">Compact<span>1 ware</span></div></div>
+        <div class="center col"><div data-logo="size-md" style="width:220px"></div><div class="cap" style="text-align:center" data-comment-anchor="41bb742ceb-div">Medium<span>3 wares</span></div></div>
+        <div class="center col"><div data-logo="size-lg" style="width:300px"></div><div class="cap" style="text-align:center">Hero<span>6 wares</span></div></div>
+      </div>
+    </div>
+    <p class="muted" style="margin-top:24px;max-width:60ch">Rule of thumb: add one ware for every ~120px of additional width, and use the smallest size that still reads — there’s no single default. Below 48px, drop the wares entirely and let the table carry the brand.</p>
+  </section>
+
+  <!-- ============ 03 BACKGROUNDS ============ -->
+  <section id="backgrounds">
+    <div class="sec-head">
+      
+      <div>
+        <h2 class="sec-title">Backgrounds</h2>
+        <p class="sec-sub">Two surfaces, two directions. Blue ink on beige is primary; beige on blue is the reverse. Never set the logo on white or on a busy photo.</p>
+      </div>
+    </div>
+    <div class="grid2">
+      <div>
+        <div class="panel panel-pad center" style="min-height:320px;background:var(--beige)">
+          <div class="col" style="align-items:center;gap:24px">
+            <div data-logo="bg-light" style="width:340px"></div>
+            <div class="painted" style="font-size:40px;font-family:Times,'Times New Roman',serif;font-style:italic;font-weight:500">STUDIO TABLE</div>
+          </div>
+        </div>
+        <div class="cap">Primary · ink on beige</div>
+      </div>
+      <div>
+        <div class="panel blue panel-pad center" style="min-height:320px">
+          <div class="col" style="align-items:center;gap:24px">
+            <div data-logo="bg-dark" style="width:340px"></div>
+            <div class="painted" style="font-size:40px;font-family:Times,'Times New Roman',serif;font-style:italic;font-weight:500;color:var(--beige)">STUDIO TABLE</div>
+          </div>
+        </div>
+        <div class="cap">Reverse · beige on blue</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 04 MISUSE ============ -->
+  <section id="misuse">
+    <div class="sec-head">
+      
+      <div>
+        <h2 class="sec-title">Misuse</h2>
+        <p class="sec-sub">The system is loose by design. A few rules keep it on track.</p>
+      </div>
+    </div>
+    <div class="grid3" data-comment-anchor="7652b17da0-div">
+      <div>
+        <div class="panel panel-pad center dont" style="min-height:200px"><div data-logo="misuse-color" style="width:170px"></div></div>
+        <div class="cap">Don’t recolour<span>Blue &amp; beige only — never a third colour.</span></div>
+      </div>
+      <div>
+        <div class="panel panel-pad center dont" style="min-height:200px"><div data-logo="misuse-stretch" style="width:230px;transform:scaleY(1.7)"></div></div>
+        <div class="cap">Don’t distort<span>Keep the table’s proportions.</span></div>
+      </div>
+      <div>
+        <div class="panel panel-pad center dont" style="min-height:200px;background:#0c8a4a"><div data-logo="misuse-bg" style="width:170px"></div></div>
+        <div class="cap">Don’t place off-palette<span>No foreign background colours.</span></div>
+      </div>
+      <div>
+        <div class="panel panel-pad center dont" style="min-height:200px"><div class="cover-word" style="font-size:40px;font-weight:600;font-family:Arial,sans-serif;filter:none">STUDIO TABLE</div></div>
+        <div class="cap">Don’t substitute the font<span>Crimson Pro only.</span></div>
+      </div>
+      <div data-comment-anchor="36a26ca1d8-div">
+        <div class="panel panel-pad center dont" style="min-height:200px"><div data-logo="misuse-clean" style="width:230px"></div></div>
+        <div class="cap">Don’t over-straighten<span>Keep the hand-drawn wobble.</span></div>
+      </div>
+      <div>
+        <div class="panel panel-pad center dont" style="min-height:200px"><div data-logo="misuse-alter" style="width:230px"></div></div>
+        <div class="cap">Don’t alter the table<span>Never add overhangs, extra legs, or change the silhouette — the table is fixed.</span></div>
+      </div>
+      <div>
+        <div class="panel panel-pad center dont" style="min-height:200px"><div data-logo="misuse-weight" style="width:230px"></div></div>
+        <div class="cap">Don’t vary the thickness<span>The top bar and legs always share one consistent weight — never thicken or thin one against the other.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 05 COLOR ============ -->
+  <section id="color">
+    <div class="sec-head">
+      
+      <div>
+        <h2 class="sec-title" data-comment-anchor="8b763e6dff-h2">Colour</h2>
+        <p class="sec-sub">Two families, nothing else. An electric blue that feels like fresh ink, and a warm beige like aged paper. The contrast is the whole personality.</p>
+      </div>
+    </div>
+    <div id="swatches" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:24px"></div>
+    <p class="muted" style="margin-top:28px;max-width:62ch">Ink Blue on Paper clears WCAG AA for text. Deep Blue carries large fills, hovers, and shadow; Sand handles panels, borders, and quiet surfaces. The whole system runs on blue and beige.</p>
+  </section>
+
+  <!-- ============ 06 TYPE ============ -->
+  <section id="type">
+    <div class="sec-head">
+      
+      <div>
+        <h2 class="sec-title">Typography</h2>
+        <p class="sec-sub">Crimson Pro does the work — headlines, body, and the small print. The wordmark is the one exception: it’s set in Times italic.</p>
+      </div>
+    </div>
+
+    <div class="panel panel-pad" style="margin-bottom:40px">
+      <div style="font-size:clamp(64px,12vw,150px);font-weight:600;line-height:.9;letter-spacing:-0.02em">Aa</div>
+      <div class="glyphset" style="margin-top:24px">ABCDEFGHIJKLMNOPQRSTUVWXYZ<br/>abcdefghijklmnopqrstuvwxyz<br/>1234567890 &amp; ? ! · — “ ”</div>
+      <div class="cap">Crimson Pro · Light 300 · Regular 400 · Medium 500 · SemiBold 600 · Bold 700 · plus italics</div>
+    </div>
+
+    <div class="specimen"><div class="meta">Display<span>600 · -2% · painted</span></div><div style="font-size:64px;font-weight:600;letter-spacing:-0.02em" class="painted-soft">A table worth keeping.</div></div>
+    <div class="specimen"><div class="meta">Heading<span>600 · -1%</span></div><div style="font-size:40px;font-weight:600;letter-spacing:-0.01em">Second-hand, first choice.</div></div>
+    <div class="specimen"><div class="meta">Subhead<span>500</span></div><div style="font-size:26px;font-weight:500">Found objects for the considered home.</div></div>
+    <div class="specimen"><div class="meta">Body<span>400 · lh 1.6</span></div><div style="font-size:18px;font-weight:400;line-height:1.6;max-width:54ch">Every piece on the shelf has had a life before this one. We clean it, we price it fairly, and we let it wait for the right room. Body copy sits at eighteen pixels with generous leading.</div></div>
+    <div class="specimen"><div class="meta">Italic / quote<span>400 italic</span></div><div style="font-size:26px;font-style:italic;font-weight:400">“Buy nothing new that can be bought beautifully old.”</div></div>
+    <div class="specimen"><div class="meta">Label / caps<span>600 · +22% · uppercase</span></div><div class="eyebrow" style="font-size:16px">Open Thursday to Sunday · 11–18</div></div>
+  </section>
+
+  <!-- ============ 07 WARES ============ -->
+  <section id="wares">
+    <div class="sec-head">
+      
+      <div>
+        <h2 class="sec-title">The wares</h2>
+        <p class="sec-sub">A drawn library of objects that live on the table. Use them on the logo, on their own as icons, or scattered as a motif. The set is open — new finds become new drawings.</p>
+      </div>
+    </div>
+    <div class="grid6" id="waresGrid"></div>
+    <p class="muted" style="margin-top:28px;max-width:60ch">Drawn in the same hand as the table: single-weight line, rounded ends, the same wobble. Treat them as a growing collection — a candlestick today, a typewriter tomorrow.</p>
+
+    <div class="cap" style="margin-top:48px;margin-bottom:14px">Motif · repeat as a pattern</div>
+    <div class="pattern-strip" id="patternStrip"></div>
+  </section>
+
+  <!-- ============ 08 TEXTURE ============ -->
+  <section id="texture">
+    <div class="sec-head">
+      
+      <div>
+        <h2 class="sec-title">The hand-drawn system</h2>
+        <p class="sec-sub" data-comment-anchor="2a00b9610a-p">The wobble is the rule that ties the table, the wares, and the type together. One brush, used everywhere.</p>
+      </div>
+    </div>
+    <div class="grid3">
+      <div class="panel panel-pad col" style="gap:18px;min-height:220px">
+        <div class="painted" style="font-size:40px;font-weight:600">studio</div>
+        <p style="font-size:15px">Painted — the displacement brush on type and marks. The brand’s loudest voice; use for the logo and big moments.</p>
+      </div>
+      <div class="panel panel-pad col" style="gap:18px;min-height:220px">
+        <div class="painted-soft" style="font-size:40px;font-weight:600">studio</div>
+        <p style="font-size:15px">Soft — a gentler wobble for headlines and longer words where legibility matters.</p>
+      </div>
+      <div class="panel panel-pad col" style="gap:18px;min-height:220px">
+        <div style="font-size:40px;font-weight:600">studio</div>
+        <p style="font-size:15px">Clean — plain Crimson Pro for body copy and anything small.</p>
+      </div>
+    </div>
+    <div class="panel blue panel-pad" style="margin-top:32px">
+      <div class="eyebrow">The painted edge</div>
+      <div class="painted" style="font-size:clamp(40px,6vw,64px);font-family:Times,'Times New Roman',serif;font-style:italic;font-weight:500;color:var(--beige);margin-top:16px">STUDIO TABLE</div>
+      <p style="font-size:18px;margin-top:16px;max-width:46ch" data-comment-anchor="70ac4d08fb-p">Selecting the words reveals the highlight riding the painted edge — the texture goes all the way down.</p>
+    </div>
+  </section>
+
+  <!-- ============ 09 APPLICATIONS ============ -->
+  <section id="apps">
+    <div class="sec-head">
+      
+      <div>
+        <h2 class="sec-title">Applications</h2>
+        <p class="sec-sub">Early directions, from swing-tag to shopfront, to show how far the system stretches.</p>
+      </div>
+    </div>
+    <div class="grid4">
+      <div>
+        <div class="tote">
+          <img src="assets/tote.jpg" alt="Studio table tote bag" />
+        </div>
+        <div class="cap">Tote</div>
+      </div>
+      <div>
+        <div class="tag-photo">
+          <img src="assets/swing-tag.jpg" alt="Studio table swing tag" />
+        </div>
+        <div class="cap">Swing tag</div>
+      </div>
+      <div>
+        <div class="card-app">
+          <div data-logo="app-card" style="width:90px"></div>
+          <div>
+            <div class="painted-soft" style="font-size:24px;font-family:Times,'Times New Roman',serif;font-style:italic;font-weight:500">STUDIO TABLE</div>
+            <div style="font-size:14px;margin-top:8px;line-height:1.5" class="muted" data-comment-anchor="05196c65b5-div">Second-hand &amp; curious objects<br/>Hantverkargatan 37, Stockholm</div>
+          </div>
+        </div>
+        <div class="cap">Business card</div>
+      </div>
+      <div>
+        <div class="avatar"><div data-logo="app-avatar" style="width:120px"></div></div>
+        <div class="cap">Social avatar</div>
+      </div>
+    </div>
+    <div class="grid2" style="margin-top:24px">
+      <div>
+        <div class="sign"><div class="col" style="align-items:center;gap:18px"><div data-logo="app-sign" style="width:min(460px,70%)"></div><div class="painted" style="font-size:clamp(28px,5vw,52px);font-family:Times,'Times New Roman',serif;font-style:italic;font-weight:500;color:var(--beige)">STUDIO TABLE</div></div></div>
+        <div class="cap">Shopfront sign</div>
+      </div>
+      <div>
+        <div class="panel panel-pad center" style="aspect-ratio:2/1;background:var(--sand)">
+          <div class="grid3" style="gap:14px;width:100%">
+            <div class="center"><div data-logo="ig-1" style="width:78px"></div></div>
+            <div class="center"><div data-logo="ig-2" style="width:78px"></div></div>
+            <div class="center"><div data-logo="ig-3" style="width:78px"></div></div>
+          </div>
+        </div>
+        <div class="cap">Social grid · wares as posts</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 10 NEXT ============ -->
+  <section id="next">
+    <div class="sec-head">
+      
+      <div>
+        <h2 class="sec-title">Where next</h2>
+        <p class="sec-sub">How to make the brand fuller and more scalable — a shortlist to take into motion and web.</p>
+      </div>
+    </div>
+    <div class="reco">
+      <div><div class="n">01 · MOTION</div><h4>The shelf assembles.</h4><p>Animate the logo as a hand drawing the table, then wares “placed” one by one. The stroke wobble is already vector — perfect for draw-on and a gentle idle sway.</p></div>
+      <div><div class="n">02 · WEBSITE</div><h4>A shelf you scroll.</h4><p>Treat the catalogue as an endless table: products sit on drawn shelves, the header logo gains/sheds wares with viewport width using the responsive rule.</p></div>
+      <div><div class="n">03 · ICON LIBRARY</div><h4>Grow the wares.</h4><p>Keep drawing objects as new stock arrives — a named, versioned set. They double as category icons, stickers, and packing-tape print.</p></div>
+      <div><div class="n">04 · PHOTOGRAPHY</div><h4>One blue prop.</h4><p>Shoot real pieces on beige with a single blue element in frame (a painted wall, a cloth) so photos lock to the palette without filters.</p></div>
+      <div><div class="n">05 · VOICE</div><h4>Dry &amp; fond.</h4><p>Short, honest object descriptions with a wink — “Chipped, charming, cheaper for it.” Build a copy bank so the tone scales past one writer.</p></div>
+      <div><div class="n">06 · TYPE SCALE</div><h4>Lock the tokens.</h4><p>Promote the sizes on this page to named tokens (display / heading / body / label) so web, print, and signage stay in step.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ ASSETS / DOWNLOADS ============ -->
+  <section id="assets">
+    <div class="sec-head">
+      <div>
+        <h2 class="sec-title">Assets</h2>
+        <p class="sec-sub">The core marks, ready to use — blue on transparent. SVG scales cleanly for print and signage; PNG suits slides and the web.</p>
+      </div>
+    </div>
+    <div class="dl-grid" id="dlGrid"></div>
+  </section>
+
+  <footer style="padding:64px 0 96px;border-top:1px solid color-mix(in srgb,var(--blue) 22%, transparent);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px">
+    <div class="painted" style="font-size:34px;font-family:Times,'Times New Roman',serif;font-style:italic;font-weight:500">STUDIO TABLE</div>
+    <span class="eyebrow">Brand Guidelines v1.0 — Living document</span>
+  </footer>
+
+</div>
+
+<script src="logo-marks.js"></script>
+<script>
+  const BLUE = "#1A16E8", BEIGE = "#F4EFE3";
+  const { tableSVG, markSVG, OBJECT_NAMES } = window;
+
+  function set(sel, html){ const el = document.querySelector('[data-logo="'+sel+'"]'); if(el){ el.innerHTML = html; const s = el.querySelector('svg'); if(s){ s.style.width="100%"; s.style.height="auto"; s.style.display="block"; } } }
+
+  // logos
+  set("cover-mark", tableSVG({ w:880, bar:18, color:BLUE, rough:"soft", seed:2, width:880,
+    objects:["plant","vaseFlowers","books","lamp","candle","clock","bowl"] }));
+  set("primary", tableSVG({ w:760, bar:18, color:BLUE, rough:"soft", seed:3, width:640,
+    objects:["vaseFlowers","books","lamp","bowl","clock","plant"] }));
+  set("mark", markSVG({ variant:"flat", rough:"soft", color:BLUE, size:230, seed:5 }));
+  set("clearspace", markSVG({ variant:"flat", rough:"soft", color:BLUE, size:240, seed:5 }));
+
+  // sizes
+  set("size-icon", markSVG({ variant:"flat", rough:"soft", color:BLUE, size:54, seed:7 }));
+  set("size-sm", tableSVG({ w:260, bar:18, color:BLUE, rough:"soft", seed:8, width:120, objects:["vaseFlowers"] }));
+  set("size-md", tableSVG({ w:480, bar:18, color:BLUE, rough:"soft", seed:9, width:220, objects:["vaseFlowers","books","lamp"] }));
+  set("size-lg", tableSVG({ w:740, bar:18, color:BLUE, rough:"soft", seed:10, width:300,
+    objects:["vaseFlowers","books","lamp","bowl","clock","plant"] }));
+
+  // backgrounds
+  set("bg-light", tableSVG({ w:560, bar:18, color:BLUE, rough:"soft", seed:11, width:340,
+    objects:["vaseFlowers","books","lamp","bowl"] }));
+  set("bg-dark", tableSVG({ w:560, bar:18, color:BEIGE, rough:"soft", seed:11, width:340,
+    objects:["vaseFlowers","books","lamp","bowl"] }));
+
+  // misuse
+  set("misuse-color", markSVG({ variant:"flat", rough:"soft", color:"#C24A28", size:170, seed:12 }));
+  set("misuse-stretch", markSVG({ variant:"flat", rough:"soft", color:BLUE, size:230, seed:13 }));
+  set("misuse-bg", markSVG({ variant:"flat", rough:"soft", color:BEIGE, size:170, seed:14 }));
+  set("misuse-clean", tableSVG({ w:480, bar:18, color:BLUE, rough:"clean", seed:15, width:230, objects:["vaseFlowers","books","lamp"] }));
+  set("misuse-alter", markSVG({ variant:"signature", rough:"soft", color:BLUE, size:230, seed:16 }));
+  set("misuse-weight", tableSVG({ w:480, bar:34, legW:9, color:BLUE, rough:"soft", seed:25, width:230, objects:["books"] }));
+
+  // applications
+  set("app-tote", markSVG({ variant:"flat", rough:"soft", color:BLUE, size:140, seed:17 }));
+  set("app-tag", markSVG({ variant:"flat", rough:"soft", color:BLUE, size:110, seed:18 }));
+  set("app-card", markSVG({ variant:"flat", rough:"soft", color:BLUE, size:90, seed:19 }));
+  set("app-avatar", markSVG({ variant:"flat", rough:"soft", color:BEIGE, size:120, seed:20 }));
+  set("app-sign", tableSVG({ w:620, bar:18, color:BEIGE, rough:"soft", seed:21, width:460,
+    objects:["vaseFlowers","books","lamp","bowl"] }));
+  set("ig-1", markSVG({ variant:"flat", rough:"soft", color:BLUE, size:78, seed:22 }));
+  set("ig-2", tableSVG({ w:220, bar:18, color:BLUE, rough:"soft", seed:23, width:78, objects:["vaseFlowers"] }));
+  set("ig-3", markSVG({ variant:"flat", rough:"soft", color:BLUE, size:78, seed:24 }));
+
+  // swatches
+  const PAL = [
+    { name:"Ink Blue", hex:"#1A16E8", use:"Text, marks, the lead colour." },
+    { name:"Deep Blue", hex:"#100C9E", use:"Large fills, hovers, depth." },
+    { name:"Paper", hex:"#FCFAF4", use:"The page background — the lightest beige." },
+    { name:"Ecru", hex:"#FAF6EC", use:"A warm beige for large surfaces." },
+    { name:"Beige", hex:"#F2ECDC", use:"Cards and panels, a shade down again." },
+    { name:"Sand", hex:"#E7DEC9", use:"Borders and quiet surfaces." },
+  ];
+  document.getElementById("swatches").innerHTML = PAL.map(p =>
+    `<div class="sw"><div class="sw-chip" style="background:${p.hex}"></div>
+      <div class="sw-meta"><div class="sw-name">${p.name}</div><div class="sw-hex">${p.hex}</div>
+      <div class="sw-use">${p.use}</div></div></div>`).join("");
+
+  // wares grid
+  const WLAB = { vaseFlowers:"Flowers", bowl:"Bowl", books:"Books", lamp:"Lamp", plant:"Plant",
+    candle:"Candle", clock:"Clock", teapot:"Teapot", pitcher:"Pitcher", trinkets:"Trinkets", frame:"Frame", cup:"Cup" };
+  document.getElementById("waresGrid").innerHTML = OBJECT_NAMES.map((n,i) =>
+    `<div class="ware"><span style="display:inline-flex;line-height:0">${
+      tableSVG({ w:220, bar:14, color:BLUE, rough:"soft", seed:40+i, width:150, objects:[n] })
+    }</span><span class="lab">${WLAB[n]||n}</span></div>`).join("");
+
+  // pattern strip — repeated tiny tables
+  const tile = markSVG({ variant:"flat", rough:"soft", color:BLUE, size:84, seed:61 });
+  document.getElementById("patternStrip").innerHTML =
+    Array.from({length:16}).map(()=>`<span style="display:inline-flex;line-height:0;opacity:.85">${tile}</span>`).join("");
+
+  // ---- downloadable assets ----------------------------------------------
+  const WM_FONT = "Times New Roman, Times, serif";
+  // the brand's hand-drawn brush, inlined so downloaded SVGs are self-contained
+  function brushDef(id){
+    return `<defs><filter id="${id}" x="-8%" y="-28%" width="116%" height="156%">`
+      + `<feTurbulence type="turbulence" baseFrequency="0.011" numOctaves="3" seed="8" result="n"/>`
+      + `<feDisplacementMap in="SourceGraphic" in2="n" scale="6" xChannelSelector="R" yChannelSelector="G"/>`
+      + `</filter></defs>`;
+  }
+  function wordmarkSVG(color){
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 140" width="600" height="140">`
+      + brushDef("wmBrush")
+      + `<text x="300" y="98" text-anchor="middle" font-family="${WM_FONT}" font-style="italic" font-weight="500" font-size="88" fill="${color}" filter="url(#wmBrush)">STUDIO TABLE</text></svg>`;
+  }
+  function lockupSVG(color){
+    const tbl = tableSVG({ w:680, bar:18, color:color, rough:"soft", seed:27, width:680,
+      objects:["vaseFlowers","books","lamp","bowl"] });
+    const inner = tbl.replace(/^<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "");
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 340" width="680" height="340">`
+      + brushDef("lkBrush")
+      + `<svg x="0" y="0" width="680" height="200" viewBox="0 0 680 200">${inner}</svg>`
+      + `<text x="340" y="300" text-anchor="middle" font-family="${WM_FONT}" font-style="italic" font-weight="500" font-size="68" fill="${color}" filter="url(#lkBrush)">STUDIO TABLE</text></svg>`;
+  }
+
+  const dlAssets = [
+    { id:"mark", label:"Logo mark", w:400, h:400,
+      svg:()=> markSVG({ variant:"flat", rough:"soft", color:BLUE, size:400, seed:5 }) },
+    { id:"shelf", label:"Loaded shelf", w:760, h:200,
+      svg:()=> tableSVG({ w:760, bar:18, color:BLUE, rough:"soft", seed:3, width:760,
+        objects:["vaseFlowers","books","lamp","bowl","clock","plant"] }) },
+    { id:"wordmark", label:"Wordmark", w:600, h:140, svg:()=> wordmarkSVG(BLUE) },
+    { id:"lockup", label:"Full lockup", w:680, h:340, svg:()=> lockupSVG(BLUE) },
+  ];
+
+  function downloadBlob(blob, filename){
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = filename; document.body.appendChild(a); a.click();
+    a.remove(); setTimeout(()=>URL.revokeObjectURL(url), 1000);
+  }
+  function downloadSVG(svgStr, name){
+    downloadBlob(new Blob([svgStr], { type:"image/svg+xml;charset=utf-8" }), name + ".svg");
+  }
+  function downloadPNG(svgStr, w, h, name){
+    const img = new Image();
+    img.onload = () => {
+      const c = document.createElement("canvas");
+      c.width = w * 2; c.height = h * 2;
+      const ctx = c.getContext("2d"); ctx.scale(2, 2); ctx.drawImage(img, 0, 0, w, h);
+      c.toBlob(b => downloadBlob(b, name + ".png"), "image/png");
+    };
+    img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svgStr);
+  }
+
+  const dlGrid = document.getElementById("dlGrid");
+  dlGrid.innerHTML = dlAssets.map((a,i) =>
+    `<div class="dl-card"><div class="dl-prev" data-prev="${i}"></div>`
+    + `<div class="dl-bar"><span class="dl-label">${a.label}</span>`
+    + `<button data-svg="${i}">SVG</button><button data-png="${i}">PNG</button></div></div>`).join("");
+  dlAssets.forEach((a,i) => { dlGrid.querySelector('[data-prev="'+i+'"]').innerHTML = a.svg(); });
+  dlGrid.addEventListener("click", (e) => {
+    const s = e.target.closest("[data-svg]"), p = e.target.closest("[data-png]");
+    if (s){ const a = dlAssets[+s.dataset.svg]; downloadSVG(a.svg(), "studio-table-" + a.id); }
+    if (p){ const a = dlAssets[+p.dataset.png]; downloadPNG(a.svg(), a.w, a.h, "studio-table-" + a.id); }
+  });
+</script>
+</body>
+</html>
+
+<style id="__om-edit-overrides">
+.cover-mid svg { width: 661px !important }
+.cover-mid svg { width: 668px !important }
+.cover-mid svg { width: 676px !important }
+.cover-mid svg { width: 685px !important }
+.cover-mid svg { width: 692px !important }
+.cover-mid svg { width: 700px !important }
+.cover-mid svg { width: 708px !important }
+.cover-mid svg { width: 716px !important }
+.cover-mid svg { width: 725px !important }
+.cover-mid svg { width: 734px !important }
+.cover-mid svg { width: 743px !important }
+i { font-size: 80px !important }
+i { font-size: 75px !important }
+i { font-size: 74px !important }
+i { font-size: 72px !important }
+</style>

@@ -6,18 +6,6 @@
       "runtimeExecutable": "python3",
       "runtimeArgs": ["-m", "http.server", "4173"],
       "port": 4173
-    },
-    {
-      "name": "brand-guidelines",
-      "runtimeExecutable": "python3",
-      "runtimeArgs": [
-        "-m",
-        "http.server",
-        "4174",
-        "--directory",
-        "/private/tmp/claude-502/-Users-blomster-Documents-studio-table-website/e92fa23c-47de-4521-bbae-95f5eeebef3b/scratchpad/studio-table/project"
-      ],
-      "port": 4174
     }
   ]
 }
