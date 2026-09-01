@@ -1,0 +1,388 @@
+{%- comment -%}
+  Studio table — animated brand header
+  ------------------------------------------------------------------
+  Drawn table + wares, painted wordmark, brand type & colour.
+  Pull the lamp cord to flip the scene beige <-> blue.
+
+  Brand: https://antonblomster.github.io/studiotable/brand/
+    Type    Crimson Pro (body / tagline / caps),  Times italic (wordmark)
+    Colour  Blue #1A16E8 · Deep blue #100C9E · Paper #FAF6EC
+            Beige #F4EFE3 · Sand #E7DEC9   — blue & beige only.
+    Caps    600 weight, +22% tracking, uppercase  (the address line)
+
+  Add via Online Store > Themes > Edit code > Sections, then drop
+  "Studio table header" into a section group (header.json) or a page.
+{%- endcomment -%}
+
+{%- assign uid = section.id -%}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap">
+
+<style>
+  #stbl-{{ uid }}{
+    --blue:#1A16E8; --blue-deep:#100C9E;
+    --paper:#FAF6EC; --beige:#F4EFE3; --sand:#E7DEC9;
+    --serif:'Crimson Pro', Georgia, serif;
+    --ink:var(--blue);
+    --surface:{% if section.settings.bg == 'blue' %}var(--blue){% else %}var(--paper){% endif %};
+    --energy:1.25; --sway-amp:3.25deg; --bob-amp:3.75px; --poke-h:20px;
+
+    position:relative;
+    background:var(--surface);
+    color:var(--ink);
+    font-family:var(--serif);
+    transition:background .3s ease,color .3s ease;
+    overflow:hidden;
+  }
+  #stbl-{{ uid }} *,#stbl-{{ uid }} *::before,#stbl-{{ uid }} *::after{box-sizing:border-box;}
+  #stbl-{{ uid }}[data-bg="blue"]{ --surface:var(--blue); --ink:var(--beige); }
+  #stbl-{{ uid }}[data-bg="beige"]{ --surface:var(--paper); --ink:var(--blue); }
+  #stbl-{{ uid }} ::selection{background:var(--ink);color:var(--surface);}
+
+  #stbl-{{ uid }} .stbl-page{
+    min-height:{{ section.settings.height }}px;
+    display:flex;flex-direction:column;
+    padding:clamp(18px,3vh,36px) clamp(22px,4vw,56px);
+  }
+  #stbl-{{ uid }} .stbl-stage-area{
+    flex:1 1 auto;display:flex;align-items:center;justify-content:center;min-height:0;
+    padding-bottom:clamp(16px,7vh,72px);
+  }
+  #stbl-{{ uid }} .stbl-lockup{
+    width:94vw;max-width:1180px;
+    display:flex;flex-direction:column;align-items:center;
+    gap:clamp(18px,3.4vh,44px);
+  }
+  #stbl-{{ uid }} .stbl-title-group{
+    display:flex;flex-direction:column;align-items:center;
+    gap:clamp(8px,1.6vh,18px);
+  }
+  #stbl-{{ uid }} .ml-stage{ width:100%; height:clamp(180px,32vh,360px); }
+  #stbl-{{ uid }} .stbl-wordmark{
+    font-family:'Times','Times New Roman',serif;
+    font-size:clamp(40px,10vw,104px);
+    font-weight:500;font-style:italic;line-height:.9;letter-spacing:-0.02em;white-space:nowrap;
+    color:var(--ink);transition:color .3s ease;
+  }
+  #stbl-{{ uid }} .stbl-tagline{
+    font-size:clamp(15px,4.4vw,25px);
+    font-style:italic;font-weight:400;letter-spacing:.005em;
+    color:color-mix(in srgb,var(--ink) 78%,var(--surface));
+    text-align:center;transition:color .3s ease;
+  }
+  #stbl-{{ uid }} .stbl-foot{
+    flex:0 0 auto;
+    display:flex;justify-content:space-between;align-items:flex-end;gap:16px;
+    font-size:clamp(12px,1.4vw,15px);font-weight:600;letter-spacing:.22em;text-transform:uppercase;
+    color:color-mix(in srgb,var(--ink) 72%,var(--surface));transition:color .3s ease;
+  }
+  #stbl-{{ uid }} .stbl-foot span{white-space:nowrap;}
+  #stbl-{{ uid }} .stbl-foot .r{text-align:right;}
+
+  #stbl-{{ uid }} .painted{filter:url(#stbl-txtbrush-{{ uid }});}
+
+  /* motion-lab primitives */
+  #stbl-{{ uid }} .ml-stage{position:relative;overflow:visible;}
+  #stbl-{{ uid }} .ml-table{position:absolute;inset:0;filter:url(#stbl-wobble-{{ uid }});pointer-events:none;}
+  #stbl-{{ uid }} .ml-top,#stbl-{{ uid }} .ml-leg{position:absolute;background:var(--ink);border-radius:2px;transition:background .3s ease;}
+  #stbl-{{ uid }} .ml-ware{position:absolute;will-change:transform,left;pointer-events:none;}
+  #stbl-{{ uid }} .ml-ware .ml-svg{width:100%;height:100%;display:block;overflow:visible;transform-origin:50% 87.5%;}
+  #stbl-{{ uid }} .ml-obj-ink *{stroke:var(--ink);transition:stroke .3s ease;}
+  #stbl-{{ uid }} .ml-obj-fill *{stroke:var(--surface);fill:var(--surface);transition:stroke .3s ease,fill .3s ease;}
+  #stbl-{{ uid }} .ml-hit{position:absolute;inset:0;}
+  #stbl-{{ uid }} .ml-hit svg{width:100%;height:100%;display:block;overflow:visible;pointer-events:none;}
+  #stbl-{{ uid }} .ml-hit svg *{stroke:transparent !important;fill:transparent !important;stroke-width:16px !important;pointer-events:all;}
+  #stbl-{{ uid }} .ml-pull{pointer-events:auto;}
+  #stbl-{{ uid }} .ml-shadow{position:absolute;left:14%;width:72%;height:9px;border-radius:50%;z-index:-1;
+    background:radial-gradient(closest-side,color-mix(in srgb,var(--ink) 26%,transparent),transparent);
+    transition:transform .3s ease,opacity .3s ease;}
+  #stbl-{{ uid }} .ml-grab{cursor:grab;}
+
+  @keyframes stbl-sway{from{transform:rotate(calc(-1*var(--sway-amp,2.6deg)))}to{transform:rotate(var(--sway-amp,2.6deg))}}
+  #stbl-{{ uid }} .idle-sway .ml-svg{animation:stbl-sway calc(var(--dur,4s)/var(--energy,1)) ease-in-out var(--d,0s) infinite alternate;}
+  @keyframes stbl-bob{from{transform:translateY(0)}to{transform:translateY(calc(-1*var(--bob-amp,3px)))}}
+  #stbl-{{ uid }} .idle-bob .ml-svg{animation:stbl-bob calc(var(--dur,4s)/var(--energy,1)) ease-in-out var(--d,0s) infinite alternate;}
+  @keyframes stbl-jitter{0%,90%,100%{transform:translate(0,0)}93%{transform:translate(1px,-1px) rotate(1deg)}96%{transform:translate(-1px,1px) rotate(-1deg)}}
+  #stbl-{{ uid }} .idle-jitter .ml-svg{animation:stbl-jitter calc(5s/var(--energy,1)) ease-in-out var(--d,0s) infinite;}
+  @keyframes stbl-tilt{0%,58%{transform:rotate(0)}70%{transform:rotate(-13deg)}80%{transform:rotate(-11deg)}100%{transform:rotate(0)}}
+  #stbl-{{ uid }} .idle-tilt .ml-svg{animation:stbl-tilt 10s ease-in-out var(--d,0s) infinite;}
+  @keyframes stbl-poke{0%{transform:translateY(0)}28%{transform:translateY(calc(-1*var(--poke-h,18px))) scaleY(1.05)}58%{transform:translateY(0) scaleY(.95)}80%{transform:translateY(-5px)}100%{transform:translateY(0)}}
+  #stbl-{{ uid }} .ml-poke{animation:stbl-poke .6s cubic-bezier(.3,1.4,.5,1);}
+  #stbl-{{ uid }} .ml-lift{transform:translateY(-18px) scale(1.06);transition:transform .16s ease;z-index:30;}
+  #stbl-{{ uid }} .ml-lift .ml-shadow{transform:scale(1.3);opacity:.45;}
+  @keyframes stbl-drop{0%{transform:translateY(-18px) scale(1.06)}55%{transform:translateY(0) scale(1)}74%{transform:translateY(-6px) scale(1.01)}100%{transform:translateY(0) scale(1)}}
+  #stbl-{{ uid }} .ml-drop{animation:stbl-drop .36s cubic-bezier(.3,1.3,.5,1);}
+
+  #stbl-{{ uid }} .ml-rays{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;}
+  #stbl-{{ uid }} .ml-rays line{stroke:var(--ink);stroke-width:3.4;stroke-linecap:round;transition:stroke .3s ease;}
+  #stbl-{{ uid }} .ml-rays-g{opacity:0;transition:opacity .45s ease;}
+  #stbl-{{ uid }} .lamp-on .ml-rays-g{opacity:1;}
+  @keyframes stbl-rayflick{0%,100%{opacity:.7}50%{opacity:.92}}
+  #stbl-{{ uid }} .ml-pull{position:absolute;border:none;background:transparent;cursor:pointer;z-index:20;padding:0 9px;line-height:0;display:block;}
+  #stbl-{{ uid }} .ml-pull-svg{width:15px;height:42px;overflow:visible;display:block;}
+  #stbl-{{ uid }} .ml-pull-line{fill:none;stroke:var(--ink);stroke-width:1.7;stroke-linecap:round;transition:stroke .3s ease;}
+  #stbl-{{ uid }} .ml-pull-knob{fill:var(--ink);transition:fill .3s ease;}
+  @keyframes stbl-tug{0%{transform:translateY(0)}42%{transform:translateY(4px)}100%{transform:translateY(0)}}
+  #stbl-{{ uid }} .ml-pull-tug{animation:stbl-tug .42s ease;}
+
+  @keyframes stbl-tablein{0%{opacity:0;transform:translateY(16px)}100%{opacity:1;transform:translateY(0)}}
+  #stbl-{{ uid }} .intro-on .ml-table{animation:stbl-tablein .8s cubic-bezier(.22,1,.36,1) both;}
+  @keyframes stbl-warein{0%{transform:translateY(-66px) rotate(-7deg);opacity:0}55%{opacity:1}80%{transform:translateY(0) rotate(0)}90%{transform:translateY(-6px)}100%{transform:translateY(0)}}
+  #stbl-{{ uid }} .intro-on .ml-ware{animation:stbl-warein .85s cubic-bezier(.3,1.2,.5,1) var(--in-d,0s) both;}
+
+  @media (prefers-reduced-motion:reduce){
+    #stbl-{{ uid }} .idle-sway .ml-svg,#stbl-{{ uid }} .idle-bob .ml-svg,#stbl-{{ uid }} .idle-jitter .ml-svg,
+    #stbl-{{ uid }} .idle-tilt .ml-svg,#stbl-{{ uid }} .lamp-on .ml-rays-g,
+    #stbl-{{ uid }} .intro-on .ml-table,#stbl-{{ uid }} .intro-on .ml-ware{animation:none;}
+  }
+  @media (max-width:600px){ #stbl-{{ uid }} .stbl-title-group{gap:clamp(4px,1vh,10px);} }
+</style>
+
+<div id="stbl-{{ uid }}" data-bg="{{ section.settings.bg }}">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+    <filter id="stbl-txtbrush-{{ uid }}" x="-4%" y="-12%" width="108%" height="124%">
+      <feTurbulence type="turbulence" baseFrequency="0.011" numOctaves="3" seed="8" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="4.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="stbl-wobble-{{ uid }}" x="-6%" y="-6%" width="112%" height="112%">
+      <feTurbulence type="turbulence" baseFrequency="0.013" numOctaves="2" seed="9" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="stbl-sketch-{{ uid }}" x="-40%" y="-40%" width="180%" height="180%">
+      <feTurbulence type="turbulence" baseFrequency="0.05" numOctaves="2" seed="13" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="2.7" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs></svg>
+
+  <div class="stbl-page">
+    <div class="stbl-stage-area">
+      <div class="stbl-lockup">
+        <div class="ml-stage" data-stbl-stage></div>
+        <div class="stbl-title-group">
+          <div class="stbl-wordmark painted">{{ section.settings.wordmark | escape }}</div>
+          {% if section.settings.tagline != blank %}
+            <div class="stbl-tagline">{{ section.settings.tagline | escape }}</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% if section.settings.addr_left != blank or section.settings.addr_right != blank %}
+      <div class="stbl-foot">
+        <span class="l">{{ section.settings.addr_left | escape }}</span>
+        <span class="r">{{ section.settings.addr_right | escape }}</span>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+(function(){
+  var SKETCH = "stbl-sketch-{{ uid }}";
+
+  /* ---- objects.js (drawn ware library) — define once ---- */
+  if (!window.OBJECTS) {
+    var ROUGH = { clean:null, soft:{scale:2.4,bf:0.013,oct:2}, med:{scale:5.0,bf:0.013,oct:2},
+      rough:{scale:9.0,bf:0.012,oct:3}, brush:{scale:14,bf:0.011,oct:3}, sketch:{scale:3.5,bf:0.045,oct:2} };
+    function S(c,sw,extra){ return 'fill="none" stroke="'+c+'" stroke-width="'+sw+'" stroke-linecap="round" stroke-linejoin="round" '+(extra||""); }
+    window.OBJECTS = {
+      vaseFlowers:(c,sw)=>'<path d="M-11,0 Q-15,-26 0,-30 Q15,-26 11,0 Z" '+S(c,sw)+'/><path d="M0,-30 C-3,-44 -12,-50 -14,-62" '+S(c,sw)+'/><path d="M0,-30 C0,-48 0,-58 0,-70" '+S(c,sw)+'/><path d="M0,-30 C3,-44 12,-50 14,-60" '+S(c,sw)+'/><circle cx="-14" cy="-64" r="5" '+S(c,sw)+'/><circle cx="0" cy="-72" r="5.5" '+S(c,sw)+'/><circle cx="14" cy="-62" r="5" '+S(c,sw)+'/>',
+      bowl:(c,sw)=>'<ellipse cx="0" cy="-14" rx="20" ry="4.5" '+S(c,sw)+'/><path d="M-19,-14 Q0,14 19,-14" '+S(c,sw)+'/><circle cx="-6" cy="-15" r="3.6" '+S(c,sw)+'/><circle cx="6" cy="-16" r="3.6" '+S(c,sw)+'/>',
+      books:(c,sw)=>'<path d="M-22,0 H16 V-9 H-22 Z" '+S(c,sw)+'/><path d="M-18,-9 H20 V-18 H-18 Z" '+S(c,sw)+'/><path d="M-13,-18 H13 V-28 H-13 Z" '+S(c,sw)+'/><path d="M-9,-23 H9" '+S(c,sw)+'/>',
+      lamp:(c,sw)=>'<path d="M-9,0 L-5,-7 H5 L9,0 Z" '+S(c,sw)+'/><path d="M0,-7 V-30" '+S(c,sw)+'/><path d="M-16,-30 L-9,-52 H9 L16,-30 Z" '+S(c,sw)+'/>',
+      plant:(c,sw)=>'<path d="M-11,0 L-9,-13 H9 L11,0 Z" '+S(c,sw)+'/><path d="M0,-13 C-13,-22 -15,-40 -5,-50" '+S(c,sw)+'/><path d="M0,-13 C0,-30 0,-44 0,-56" '+S(c,sw)+'/><path d="M0,-13 C13,-22 15,-40 5,-50" '+S(c,sw)+'/>',
+      candle:(c,sw)=>'<path d="M-6,0 L-4,-6 H4 L6,0 Z" '+S(c,sw)+'/><path d="M-6,-6 Q0,-3 6,-6" '+S(c,sw)+'/><path d="M0,-6 V-40" '+S(c,sw)+'/><path d="M0,-40 C-4,-46 -1,-53 0,-54 C1,-53 4,-46 0,-40 Z" '+S(c,sw)+'/>',
+      clock:(c,sw)=>'<path d="M-15,0 V-22 Q-15,-32 0,-32 Q15,-32 15,-22 V0 Z" '+S(c,sw)+'/><circle cx="0" cy="-17" r="8" '+S(c,sw)+'/><path d="M0,-17 V-23 M0,-17 L5,-14" '+S(c,sw)+'/><path d="M-11,0 V4 M11,0 V4" '+S(c,sw)+'/>',
+      teapot:(c,sw)=>'<path d="M-15,-6 Q-15,-21 0,-21 Q15,-21 15,-6 Q15,0 0,0 Q-15,0 -15,-6 Z" '+S(c,sw)+'/><path d="M-15,-13 C-23,-15 -25,-21 -23,-25" '+S(c,sw)+'/><path d="M15,-15 C22,-15 22,-5 15,-5" '+S(c,sw)+'/><path d="M-6,-21 Q0,-28 6,-21" '+S(c,sw)+'/><circle cx="0" cy="-29" r="2.6" '+S(c,sw)+'/>'
+    };
+    window.ROUGH_PRESETS = ROUGH;
+  }
+
+  /* ---- motion-lab.js — define once, but sketch-filter id is per-section via closure of first loader ---- */
+  if (!window.MotionLab) {
+    var BLUE="#1A16E8", BEIGE="#F4EFE3", AMBER="#FFC24B";
+    var VB={x:-32,y:-84,w:64,h:96}, BASE_FRAC=(0-VB.y)/VB.h, ASPECT=VB.h/VB.w;
+    var _fid=0;
+    function filterDefs(r,seed){ if(!r||!r.scale) return ["",""]; var id="mlf"+(++_fid);
+      var def='<defs><filter id="'+id+'" x="-35%" y="-35%" width="170%" height="170%"><feTurbulence type="turbulence" baseFrequency="'+r.bf+'" numOctaves="'+(r.oct||2)+'" seed="'+seed+'" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="'+r.scale+'" xChannelSelector="R" yChannelSelector="G"/></filter></defs>';
+      return [def,' filter="url(#'+id+')"']; }
+    function clockInner(c,sw){ var S='fill="none" stroke="'+c+'" stroke-width="'+sw+'" stroke-linecap="round" stroke-linejoin="round"';
+      return '<path d="M-15,-4 V-26 Q-15,-36 0,-36 Q15,-36 15,-26 V-4 Z" '+S+'/><circle cx="0" cy="-21" r="8" '+S+'/><path d="M-11,-4 V0 M11,-4 V0" '+S+'/><g><line x1="0" y1="-21" x2="0" y2="-27.5" '+S+'/><animateTransform attributeName="transform" type="rotate" values="0 0 -21;360 0 -21" dur="8s" repeatCount="indefinite"/></g><g><line x1="0" y1="-21" x2="4.6" y2="-18.4" '+S+'/><animateTransform attributeName="transform" type="rotate" values="0 0 -21;360 0 -21" dur="48s" repeatCount="indefinite"/></g>'; }
+    function objSVG(name,opts){ var o=opts||{}; var color=o.color||BLUE; var bg=o.bg||BEIGE; var sw=o.sw||4;
+      var rough=(o.rough&&typeof o.rough==="object")?o.rough:window.ROUGH_PRESETS[o.rough||"soft"];
+      var draw=window.OBJECTS[name];
+      var inner=name==="clock"?clockInner(color,sw):(draw?draw(color,sw):"");
+      var back=name==="clock"?clockInner(bg,sw):(draw?draw(bg,sw):"");
+      var backFilled=back.replace(/fill="none"/g,'fill="'+bg+'"');
+      var fd=filterDefs(rough,o.seed||((Math.random()*90)|0)+1);
+      return '<svg class="ml-svg" viewBox="'+VB.x+' '+VB.y+' '+VB.w+' '+VB.h+'" preserveAspectRatio="xMidYMid meet">'+fd[0]+'<g'+fd[1]+'><g class="ml-obj-fill">'+backFilled+'</g><g class="ml-obj-ink">'+inner+'</g></g></svg>'; }
+    function ix(x,w){ return ((x-VB.x)/VB.w)*w; }
+    function iy(y,w){ return ((y-VB.y)/VB.h)*(w*ASPECT); }
+    function makeWare(name,opts){ var o=opts||{}; var w=o.w||96; var h=w*ASPECT;
+      var el=document.createElement("div"); el.className="ml-ware"; el.dataset.name=name;
+      el.style.width=w+"px"; el.style.height=h+"px"; el.style.transformOrigin="50% "+(BASE_FRAC*100)+"%";
+      el.innerHTML=objSVG(name,{color:o.color,bg:o.bg,seed:o.seed,rough:o.rough});
+      var hit=document.createElement("div"); hit.className="ml-hit";
+      hit.innerHTML=objSVG(name,{color:o.color,bg:o.bg,seed:o.seed,rough:o.rough});
+      el.appendChild(hit); el._hit=hit;
+      if(name==="lamp") buildLamp(el,w);
+      if(name==="candle") buildCandle(el,w);
+      return el; }
+    function buildLamp(el,w){ var cx=0,cy=-41,n=7,a0=-116,a1=116,r0=22,lines="";
+      for(var i=0;i<n;i++){ var ang=(a0+(a1-a0)*i/(n-1))*Math.PI/180; var len=(i%2===0)?19:13;
+        var sx=(cx+r0*Math.sin(ang)).toFixed(1), sy=(cy-r0*Math.cos(ang)).toFixed(1);
+        var ex=(cx+(r0+len)*Math.sin(ang)).toFixed(1), ey=(cy-(r0+len)*Math.cos(ang)).toFixed(1);
+        lines+='<line x1="'+sx+'" y1="'+sy+'" x2="'+ex+'" y2="'+ey+'"/>'; }
+      el.insertAdjacentHTML("afterbegin",'<svg class="ml-rays" viewBox="'+VB.x+' '+VB.y+' '+VB.w+' '+VB.h+'" preserveAspectRatio="xMidYMid meet"><g class="ml-rays-g" filter="url(#'+SKETCH+')">'+lines+'</g></svg>');
+      var string=document.createElement("button"); string.className="ml-pull"; string.type="button";
+      string.setAttribute("aria-label","Pull the lamp string");
+      string.style.left=(ix(12.5,w)-16)+"px"; string.style.top=(iy(-33,w))+"px";
+      string.innerHTML='<svg class="ml-pull-svg" viewBox="0 0 15 44" preserveAspectRatio="xMidYMid meet" filter="url(#'+SKETCH+')"><path class="ml-pull-line" d="M7.5,1 C5,9 10,16 7.5,24 C6,30 8.4,35 7.5,38"/><circle class="ml-pull-knob" cx="7.5" cy="41" r="3.1"/></svg>';
+      el.appendChild(string); el.classList.add("lamp-off");
+      string.addEventListener("click",function(e){ e.stopPropagation();
+        var on=el.classList.toggle("lamp-on"); el.classList.toggle("lamp-off");
+        string.classList.remove("ml-pull-tug"); void string.offsetWidth; string.classList.add("ml-pull-tug");
+        el.dispatchEvent(new CustomEvent("ml:lampflip",{bubbles:true,detail:{on:on}})); }); }
+    function buildCandle(el,w){ var cx=0,cy=-58; var dirs=[[-1,-0.4],[0,-1],[1,-0.4],[-0.7,-0.9],[0.7,-0.9]];
+      var lines=dirs.map(function(d){ return '<line x1="'+cx+'" y1="'+cy+'" x2="'+(cx+d[0]*9)+'" y2="'+(cy+d[1]*9)+'"/>'; }).join("");
+      el.insertAdjacentHTML("beforeend",'<svg class="ml-sparks" viewBox="'+VB.x+' '+VB.y+' '+VB.w+' '+VB.h+'" preserveAspectRatio="xMidYMid meet"><g class="ml-sparks-g">'+lines+'</g></svg>');
+      el.classList.add("candle-lit");
+      el._hit.addEventListener("click",function(e){ e.stopPropagation(); el.classList.toggle("candle-lit"); }); }
+    var IDLE={ vaseFlowers:"sway", plant:"sway", candle:"bob", lamp:"", clock:"", bowl:"tilt",
+      books:"", cup:"bob", teapot:"", pitcher:"bob", trinkets:"jitter", frame:"" };
+    function applyIdle(el){ var k=IDLE[el.dataset.name]; if(k) el.classList.add("idle-"+k);
+      el.style.setProperty("--d",(Math.random()*2.4).toFixed(2)+"s");
+      el.style.setProperty("--dur",(3.6+Math.random()*2.4).toFixed(2)+"s"); }
+    function createStage(host,opts){ var o=opts||{}; var st={ host:host,
+      surfaceFrac:o.surfaceFrac!=null?o.surfaceFrac:0.52, floorFrac:o.floorFrac!=null?o.floorFrac:0.9,
+      padFrac:o.padFrac!=null?o.padFrac:0.08, barH:o.barH||15, legW:o.legW||15, wareW:o.wareW||92,
+      spanFrac:o.spanFrac!=null?o.spanFrac:1, minBarPx:o.minBarPx!=null?o.minBarPx:null,
+      fixedBarPx:o.fixedBarPx!=null?o.fixedBarPx:null, wares:[] };
+      host._ml=st; host.classList.add("ml-stage");
+      var table=document.createElement("div"); table.className="ml-table";
+      table.innerHTML='<div class="ml-top"></div><div class="ml-leg ml-leg-l"></div><div class="ml-leg ml-leg-r"></div>';
+      host.appendChild(table);
+      st.table=table; st.top=table.querySelector(".ml-top");
+      st.legL=table.querySelector(".ml-leg-l"); st.legR=table.querySelector(".ml-leg-r");
+      layout(st); new ResizeObserver(function(){ layout(st); }).observe(host); return st; }
+    function geom(st){ var W=st.host.clientWidth, H=st.host.clientHeight;
+      var surfaceY=H*st.surfaceFrac, floorY=H*st.floorFrac;
+      var fullPad=W*st.padFrac, fullSpan=W-2*fullPad;
+      var barW=st.fixedBarPx!=null?st.fixedBarPx:fullSpan*st.spanFrac;
+      if(st.minBarPx!=null) barW=Math.max(barW,st.minBarPx);
+      barW=Math.min(barW,fullSpan);
+      var barLeft=(W-barW)/2, barRight=barLeft+barW, margin=st.wareW*0.46;
+      return { W:W,H:H,surfaceY:surfaceY,floorY:floorY,barLeft:barLeft,barRight:barRight,barW:barW,
+        usableL:barLeft+margin, usableR:barRight-margin }; }
+    function layout(st){ var g=geom(st);
+      st.top.style.left=g.barLeft+"px"; st.top.style.width=g.barW+"px";
+      st.top.style.top=g.surfaceY+"px"; st.top.style.height=st.barH+"px";
+      var legTop=g.surfaceY+st.barH-1, legH=g.floorY-legTop;
+      [st.legL,st.legR].forEach(function(leg){ leg.style.top=legTop+"px"; leg.style.height=legH+"px"; });
+      st.legL.style.left=g.barLeft+"px"; st.legR.style.left=(g.barRight-st.legW)+"px";
+      st.legL.style.width=st.legW+"px"; st.legR.style.width=st.legW+"px";
+      st.wares.forEach(function(w){ placeAt(st,w,parseFloat(w.dataset.xf),g); }); }
+    function placeAt(st,ware,xf,g){ g=g||geom(st); xf=Math.max(0,Math.min(1,xf)); ware.dataset.xf=xf;
+      var cx=g.usableL+xf*(g.usableR-g.usableL);
+      var w=parseFloat(ware.style.width), h=parseFloat(ware.style.height);
+      ware.style.left=(cx-w/2)+"px"; ware.style.top=(g.surfaceY-BASE_FRAC*h)+"px"; }
+    function addWare(st,name,xf,opts){ var ware=makeWare(name,Object.assign({w:st.wareW},opts||{}));
+      st.host.appendChild(ware); st.wares.push(ware); ware.dataset.xf=xf; placeAt(st,ware,xf); applyIdle(ware); return ware; }
+    function spread(n){ if(n===1) return [0.5];
+      return Array.from({length:n},function(_,i){ return 0.08+(0.84*i)/(n-1); }); }
+    function draggable(st,ware){ ware.classList.add("ml-grab"); var t=ware._hit||ware;
+      var active=false,pid=null,grabDX=0;
+      t.addEventListener("pointerdown",function(e){ if(e.target.closest(".ml-pull")) return;
+        active=true; pid=e.pointerId; ware.dataset.dragging="1";
+        var rect=st.host.getBoundingClientRect(); var w=parseFloat(ware.style.width);
+        var curLeft=parseFloat(ware.style.left)||0;
+        grabDX=(e.clientX-rect.left)-(curLeft+w/2);
+        ware.classList.add("ml-lift");
+        ware.classList.remove("idle-sway","idle-bob","idle-jitter","idle-tilt");
+        try{ t.setPointerCapture(pid); }catch(err){}
+        st.wares.forEach(function(w){ w.style.zIndex=w===ware?30:""; });
+        e.preventDefault(); });
+      t.addEventListener("pointermove",function(e){ if(!active) return;
+        var g=geom(st); var rect=st.host.getBoundingClientRect();
+        var cx=(e.clientX-rect.left)-grabDX;
+        cx=Math.max(g.usableL,Math.min(g.usableR,cx));
+        var w=parseFloat(ware.style.width);
+        ware.dataset.xf=(cx-g.usableL)/(g.usableR-g.usableL);
+        ware.style.left=(cx-w/2)+"px"; });
+      function up(){ if(!active) return; active=false;
+        ware.classList.remove("ml-lift"); ware.classList.add("ml-drop");
+        setTimeout(function(){ ware.classList.remove("ml-drop"); applyIdle(ware); delete ware.dataset.dragging; },360);
+        try{ t.releasePointerCapture(pid); }catch(err){} }
+      t.addEventListener("pointerup",up); t.addEventListener("pointercancel",up); }
+    window.MotionLab={ BLUE:BLUE,BEIGE:BEIGE,AMBER:AMBER,VB:VB,BASE_FRAC:BASE_FRAC,ASPECT:ASPECT,
+      createStage:createStage,geom:geom,layout:layout,placeAt:placeAt,addWare:addWare,spread:spread,
+      makeWare:makeWare,applyIdle:applyIdle,draggable:draggable,objSVG:objSVG }; }
+
+  /* ---- init for THIS section ---- */
+  function init(){
+    var root=document.getElementById("stbl-{{ uid }}");
+    if(!root||root._stblInit) return; root._stblInit=true;
+    try{ if(localStorage.getItem('stbl-bg')==='blue'){ root.dataset.bg='blue'; document.documentElement.classList.add('stbl-blue'); } }catch(_){}
+    var ML=window.MotionLab;
+    var stageEl=root.querySelector("[data-stbl-stage]");
+    var ORDER=["vaseFlowers","lamp","clock","books","bowl","teapot"];
+    var blueOn=function(){ return root.dataset.bg==="blue"; };
+    var inkOf=function(){ return blueOn()?ML.BEIGE:ML.BLUE; };
+    var surfaceOf=function(){ return blueOn()?"#1A16E8":"#FAF6EC"; };
+    var TABLE_THICK=18;
+    var stage=ML.createStage(stageEl,{ surfaceFrac:0.66, floorFrac:0.96, padFrac:0.075, wareW:96, barH:TABLE_THICK, legW:TABLE_THICK });
+    var WARE_ROUGH={ scale:3.15, bf:0.014, oct:2 };
+    function bucketCount(){ var w=stageEl.clientWidth||window.innerWidth;
+      if(w<430) return 3; if(w<680) return 4; return 6; }
+    var lastSig="";
+    function placeWares(){ var list=ORDER.slice(0,bucketCount());
+      var ink=inkOf(), surf=surfaceOf(); var sig=list.join(",")+"|"+ink;
+      if(sig===lastSig) return; lastSig=sig;
+      stage.wares.slice().forEach(function(w){ w.remove(); }); stage.wares=[];
+      var xfs=ML.spread(list.length);
+      list.forEach(function(n,i){ var w=ML.addWare(stage,n,xfs[i],{ color:ink, bg:surf, seed:7+i*3, rough:WARE_ROUGH });
+        ML.draggable(stage,w); }); }
+    placeWares();
+    if(root.dataset.bg==="blue"){
+      var lw0=stageEl.querySelector('.ml-ware[data-name="lamp"]');
+      if(lw0){ lw0.classList.add("lamp-on"); lw0.classList.remove("lamp-off"); }
+    }
+    stageEl.addEventListener("ml:lampflip",function(e){
+      root.dataset.bg=e.detail.on?"blue":"beige";
+      try{ localStorage.setItem("stbl-bg", e.detail.on?"blue":"beige"); }catch(_){}
+      document.documentElement.classList.toggle("stbl-blue", !!e.detail.on);
+    });
+    if(!matchMedia("(prefers-reduced-motion: reduce)").matches){
+      stageEl.classList.add("intro-on");
+      stage.wares.forEach(function(w,i){ w.style.setProperty("--in-d",(0.04+i*0.075).toFixed(3)+"s"); });
+      var total=0.04+(stage.wares.length-1)*0.075+0.85+0.25;
+      setTimeout(function(){ stageEl.classList.remove("intro-on"); },total*1000);
+    }
+    var rt; window.addEventListener("resize",function(){ clearTimeout(rt); rt=setTimeout(placeWares,160); });
+  }
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",init); else init();
+  document.addEventListener("shopify:section:load",init);
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Studio table header",
+  "tag": "section",
+  "class": "studio-table-header",
+  "settings": [
+    { "type": "text", "id": "wordmark", "label": "Wordmark", "default": "STUDIO TABLE" },
+    { "type": "text", "id": "tagline", "label": "Tagline", "default": "Curious objects for considered homes." },
+    { "type": "text", "id": "addr_left", "label": "Address line (left)", "default": "Hantverkargatan 37" },
+    { "type": "text", "id": "addr_right", "label": "Address line (right)", "default": "Stockholm" },
+    {
+      "type": "select", "id": "bg", "label": "Background", "default": "beige",
+      "options": [ { "value": "beige", "label": "Paper beige" }, { "value": "blue", "label": "Deep blue" } ],
+      "info": "Blue & beige only. Visitors can also flip it by pulling the lamp cord."
+    },
+    { "type": "range", "id": "height", "label": "Section height", "min": 360, "max": 900, "step": 20, "unit": "px", "default": 560 }
+  ],
+  "presets": [ { "name": "Studio table header" } ]
+}
+{% endschema %}

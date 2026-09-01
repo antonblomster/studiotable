@@ -1,0 +1,92 @@
+{%- comment -%}
+  Studio table — site-wide scheme flip.
+  The lamp cord in the "Studio table header" section writes localStorage['stbl-bg'].
+  This snippet (rendered in <head>, after color-schemes) restores that choice
+  before first paint and remaps the theme's colour variables to brand blue/beige.
+  Blue & beige only — https://antonblomster.github.io/studiotable/brand/
+{%- endcomment -%}
+
+<script>
+  (function () {
+    try {
+      if (localStorage.getItem('stbl-bg') === 'blue') {
+        document.documentElement.classList.add('stbl-blue');
+      }
+    } catch (e) {}
+  })();
+</script>
+
+<style>
+  html.stbl-blue { background: #1A16E8; }
+
+  /* set the scheme vars on every element so they win over any .color-<id> scheme */
+  html.stbl-blue *,
+  html.stbl-blue *::before,
+  html.stbl-blue *::after {
+    --color-background: #1A16E8 !important;
+    --color-background-rgb: 26 22 232 !important;
+    --color-foreground: #F4EFE3 !important;
+    --color-foreground-rgb: 244 239 227 !important;
+    --color-foreground-heading: #F4EFE3 !important;
+    --color-foreground-heading-rgb: 244 239 227 !important;
+    --color-foreground-muted: rgb(244 239 227 / 0.72) !important;
+    --color-primary: #F4EFE3 !important;
+    --color-primary-rgb: 244 239 227 !important;
+    --color-primary-hover: #FAF6EC !important;
+    --color-primary-hover-rgb: 250 246 236 !important;
+    --color-border: rgb(244 239 227 / 0.28) !important;
+    --color-border-rgb: 244 239 227 !important;
+    --color-shadow: #100C9E !important;
+    --color-shadow-rgb: 16 12 158 !important;
+
+    --color-primary-button-text: #1A16E8 !important;
+    --color-primary-button-background: #F4EFE3 !important;
+    --color-primary-button-border: #F4EFE3 !important;
+    --color-primary-button-hover-text: #100C9E !important;
+    --color-primary-button-hover-background: #FAF6EC !important;
+    --color-primary-button-hover-border: #FAF6EC !important;
+
+    --color-secondary-button-text: #F4EFE3 !important;
+    --color-secondary-button-background: #1A16E8 !important;
+    --color-secondary-button-border: #F4EFE3 !important;
+    --color-secondary-button-hover-text: #1A16E8 !important;
+    --color-secondary-button-hover-background: #F4EFE3 !important;
+    --color-secondary-button-hover-border: #F4EFE3 !important;
+
+    --color-input-background: #1A16E8 !important;
+    --color-input-text: #F4EFE3 !important;
+    --color-input-text-rgb: 244 239 227 !important;
+    --color-input-border: rgb(244 239 227 / 0.5) !important;
+    --color-input-hover-background: #100C9E !important;
+
+    --color-variant-background: #1A16E8 !important;
+    --color-variant-border: rgb(244 239 227 / 0.5) !important;
+    --color-variant-text: #F4EFE3 !important;
+    --color-variant-text-rgb: 244 239 227 !important;
+    --color-variant-hover-background: #100C9E !important;
+    --color-variant-hover-text: #F4EFE3 !important;
+    --color-variant-hover-border: #F4EFE3 !important;
+    --color-selected-variant-background: #F4EFE3 !important;
+    --color-selected-variant-border: #F4EFE3 !important;
+    --color-selected-variant-text: #1A16E8 !important;
+    --color-selected-variant-hover-background: #FAF6EC !important;
+    --color-selected-variant-hover-text: #100C9E !important;
+    --color-selected-variant-hover-border: #FAF6EC !important;
+
+    --font-h1--color: #F4EFE3 !important;
+    --font-h2--color: #F4EFE3 !important;
+    --font-h3--color: #F4EFE3 !important;
+    --font-h4--color: #F4EFE3 !important;
+    --font-h5--color: #F4EFE3 !important;
+    --font-h6--color: #F4EFE3 !important;
+  }
+
+  html.stbl-blue body { background-color: #1A16E8; color: #F4EFE3; }
+
+  /* let the flip ease rather than snap when toggled live */
+  html.stbl-blue body,
+  html.stbl-blue .section,
+  html.stbl-blue [class*="color-scheme"] {
+    transition: background-color .3s ease, color .3s ease;
+  }
+</style>
