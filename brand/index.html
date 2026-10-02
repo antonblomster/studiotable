@@ -121,10 +121,8 @@
   .tag .string{position:absolute;top:-22px;left:50%;width:44px;height:34px;transform:translateX(-50%);border:2.5px solid var(--blue);border-bottom:none;border-radius:22px 22px 0 0;}
   .card-app{background:var(--beige-2);border:1px solid color-mix(in srgb,var(--blue) 18%, transparent);aspect-ratio:1.75/1;padding:30px;display:flex;flex-direction:column;justify-content:space-between;}
   .sign{background:var(--blue);color:var(--beige);aspect-ratio:2/1;display:flex;align-items:center;justify-content:center;}
-  .reel-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,3fr);gap:32px;align-items:end;}
   .reel{aspect-ratio:9/16;overflow:hidden;background:var(--beige-2);}
   .reel video{width:100%;height:100%;object-fit:cover;display:block;}
-  @media(max-width:820px){.reel-row{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;}}
   .avatar{aspect-ratio:1;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;}
 
   .toc{display:flex;flex-wrap:wrap;gap:8px 28px;font-size:15px;font-weight:500;}
@@ -503,14 +501,12 @@ Odd, lovely, used and curated. Our shop is filled with epic antiques and kitchen
         <div class="cap">Social grid · wares as posts</div>
       </div>
     </div>
-    <div class="reel-row" style="margin-top:24px">
+    <div class="grid4" style="margin-top:24px">
       <div>
         <div class="reel">
-          <video src="assets/walking-table.mp4" poster="assets/walking-table-poster.jpg" autoplay muted loop playsinline controls preload="metadata" aria-label="Animated Studio table mark: the table walks in, stretches into a shelf of wares, then walks on"></video>
+          <video src="assets/walking-table.mp4" poster="assets/walking-table-poster.jpg" autoplay muted loop playsinline controls preload="metadata" aria-label="Walking table"></video>
         </div>
-      </div>
-      <div class="cap" style="margin-top:0">The walking table · stories &amp; reels
-        <span>A 9-second, 9:16 loop for Instagram stories and reels. The table walks in, stretches into a shelf of wares, then walks on. It plays muted here; use the controls to hear the sound. <a href="assets/walking-table.mp4" download>Download the original</a> (MP4, 1080×1920, 9.6 MB).</span>
+        <div class="cap">Walking table</div>
       </div>
     </div>
   </section>
